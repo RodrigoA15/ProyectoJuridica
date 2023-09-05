@@ -1,0 +1,14 @@
+import { ConnectionMongo } from "./src/connection/connection.js";
+import app from "./app.js";
+
+const PORT = 4000;
+
+ConnectionMongo();
+
+app.listen(PORT, (error) => {
+  if (error) {
+    console.log(`error server: ${error}`);
+  } else {
+    console.log(`Server listening on ${PORT}`);
+  }
+});
