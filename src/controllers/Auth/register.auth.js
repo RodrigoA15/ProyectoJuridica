@@ -1,5 +1,6 @@
 import User from "../../models/users.js";
 import bcrypt from "bcrypt";
+import { createToken } from "../../libs/jwt.js";
 
 export const register = async (req, res) => {
   try {
@@ -18,10 +19,17 @@ export const register = async (req, res) => {
     });
 
     const savedUser = await newUser.save();
+    const token = await createToken({
+      id: savedUser._id,
+    });
 
+    res.cookie("token", token);
+    console.log(token);
     res.status(200).json(savedUser);
   } catch (error) {
     res.status(500).json(error);
     console.log(error);
   }
 };
+
+
