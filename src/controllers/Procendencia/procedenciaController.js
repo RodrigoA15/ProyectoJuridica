@@ -75,19 +75,13 @@ export const updateProcedencia = async (req, res) => {
 
 export const deleteProcedencia = async (req, res) => {
   try {
-    const foundProcedencia = await Procedencia.findById(
-      req.params.id_procedencia
-    );
-
-    if (!foundProcedencia)
-      return res.status(404).json("No se encontro la procedencia");
     const deleteProcedencia = await Procedencia.findByIdAndDelete(
       req.params.id_procedencia
     );
 
-    if (deleteProcedencia)
-      return res.status(200).json("Eliminado correctamente");
-    res.status(500).json("No se pudo eliminar la procedencia");
+    if (!deleteProcedencia)
+      return res.status(404).json("No se encontro el tipo");
+    return res.status(200).json("Eliminado correctamente");
   } catch (error) {
     res.status(500).json(`Error de sevidor ${error}`);
   }

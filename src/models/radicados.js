@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-export const RadicadoSchema = new mongoose.Schema(
+const RadicadoSchema = new mongoose.Schema(
   {
     numero_radicado: {
       type: String,
@@ -43,15 +43,15 @@ export const RadicadoSchema = new mongoose.Schema(
       required: true,
     },
 
-    id_usuario: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Usuario",
-      required: true,
-    },
+    // id_usuario: {
+    //   type: mongoose.Schema.Types.ObjectId,
+    //   ref: "Usuario",
+    //   required: true,
+    // },
   },
   {
     timestamps: true,
   }
 );
 
-mongoose.model("Radicados", RadicadoSchema);
+export default mongoose.model("Radicados", RadicadoSchema);
