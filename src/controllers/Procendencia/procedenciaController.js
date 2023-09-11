@@ -37,16 +37,20 @@ export const createProcedencia = async (req, res) => {
   }
 };
 
-export const getProcedenciaById = async (req, res) => {
+export const getProcedenciaById = async (req, res, next) => {
   try {
-    const procedencia = await Procedencia.findById(req.params.id_procedencia);
+    const procedencia = await Procedencia.findOne({
+      numero_identificacion: req.params.numero_identificacion,
+    });
 
-    if (!procedencia)
-      return res.status(404).json("No se encontro la procedencia");
-
-    res.status(200).json(procedencia);
+    if (procedencia) {
+      res.status(200).json(procedencia);
+    } else {
+      next();
+    }
   } catch (error) {
     res.status(500).json(error);
+    console.log(error);
   }
 };
 

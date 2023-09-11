@@ -18,7 +18,6 @@ import * as RadicadosController from "../controllers/Radicados/radicadoControlle
 import * as Register from "../controllers/Auth/register.auth.js";
 import * as Login from "../controllers/Auth/login.auth.js";
 import { authRequired, isAdmin } from "../middlewares/validateToken.js";
-import { verifyToken } from "../controllers/Auth/login.auth.js";
 
 const router = Router();
 
@@ -31,7 +30,7 @@ router.delete(
   "/departamento/:id_departamento",
   authRequired,
   deleteDepartamento
-);  
+);
 
 //Roles>>>>>>>>>>>>
 router.get("/role", authRequired, RoleController.getRoles);
@@ -71,23 +70,19 @@ router.delete(
 );
 
 //Canal Entrada>>>>>>>
-router.get("/canal", authRequired, CanalController.getCanal);
+router.get("/canal", CanalController.getCanal);
 router.post("/canal", authRequired, CanalController.createCanal);
 router.get("/canal/:id_canal", authRequired, CanalController.getCanalById);
 router.put("/canal/:id_canal", authRequired, CanalController.updateCanal);
 router.delete("/canal/:id_canal", authRequired, CanalController.deleteCanal);
 
 //Procedencia
-router.get("/procedencia", authRequired, ProcendenciaController.getProcedencia);
-router.post(
-  "/procedencia",
-  authRequired,
-  ProcendenciaController.createProcedencia
-);
+router.get("/procedencia", ProcendenciaController.getProcedencia);
+router.post("/procedencia", ProcendenciaController.createProcedencia);
 router.get(
-  "/procedencia/:id_procedencia",
-  authRequired,
-  ProcendenciaController.getProcedenciaById
+  "/procedencia/:numero_identificacion",
+  ProcendenciaController.getProcedenciaById,
+  ProcendenciaController.createProcedencia
 );
 
 router.put(
@@ -131,7 +126,7 @@ router.delete(
 
 //Radicados>>>>>>>
 router.get("/radicados", authRequired, RadicadosController.getRadicados);
-router.post("/radicados", authRequired, RadicadosController.createRadicados);
+router.post("/radicados", RadicadosController.createRadicados);
 router.get(
   "/radicados/:id_radicado",
   authRequired,

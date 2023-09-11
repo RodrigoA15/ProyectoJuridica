@@ -38,3 +38,21 @@ export const isAdmin = async (req, res, next) => {
     console.log(error);
   }
 };
+
+export const isCoordinador = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user.id);
+
+    const rol = await Roles.find({ _id: { $in: user.role } });
+
+    for (let i = 0; i < rol.length; i++) {
+      if (rol[i].role === "coordinador") {
+        next();
+        return;
+      }
+    }
+    return res.status(403).json("Not Permission Denied");
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
