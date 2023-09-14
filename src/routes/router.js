@@ -22,7 +22,7 @@ import { authRequired, isAdmin } from "../middlewares/validateToken.js";
 const router = Router();
 
 //Departamentos>>>>>>>>>>
-router.get("/departamento", authRequired, isAdmin, getDepartamento);
+router.get("/departamento", getDepartamento);
 router.post("/departamento", authRequired, createDepartamento);
 router.get("/departamento/:id_departamento", authRequired, getDepartamentoById);
 router.put("/departamento/:id_departamento", authRequired, updateDepartamento);
@@ -40,7 +40,7 @@ router.put("/role/:id_role", authRequired, RoleController.updateRole);
 router.delete("/role/:id_role", authRequired, RoleController.deleteRole);
 
 //Entidad>>>>>>>>
-router.get("/entidad", authRequired, EntidadController.getEntidad);
+router.get("/entidad", EntidadController.getEntidad);
 router.post("/entidad", authRequired, EntidadController.createEntidad);
 router.get(
   "/entidad/:id_entidad",
@@ -59,7 +59,7 @@ router.delete(
 );
 
 //Asunto>>>>>>>
-router.get("/asunto", authRequired, AsuntoController.getAsunto);
+router.get("/asunto", AsuntoController.getAsunto);
 router.post("/asunto", authRequired, AsuntoController.createAsunto);
 router.get("/asunto/:id_asunto", authRequired, AsuntoController.getAsuntoById);
 router.put("/asunto/:id_asunto", authRequired, AsuntoController.updateAsunto);
@@ -81,8 +81,7 @@ router.get("/procedencia", ProcendenciaController.getProcedencia);
 router.post("/procedencia", ProcendenciaController.createProcedencia);
 router.get(
   "/procedencia/:numero_identificacion",
-  ProcendenciaController.getProcedenciaById,
-  ProcendenciaController.createProcedencia
+  ProcendenciaController.getProcedenciaById
 );
 
 router.put(
@@ -98,11 +97,7 @@ router.delete(
 
 //Tipificacion>>>>>>>
 
-router.get(
-  "/tipificacion",
-  authRequired,
-  TipificacionController.getTipificacion
-);
+router.get("/tipificacion", TipificacionController.getTipificacion);
 router.post(
   "/tipificacion",
   authRequired,

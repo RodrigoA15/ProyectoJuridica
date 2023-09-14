@@ -43,11 +43,11 @@ const RadicadoSchema = new mongoose.Schema(
       required: true,
     },
 
-    // id_usuario: {
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   ref: "Usuario",
-    //   required: true,
-    // },
+    id_departamento: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Departamento",
+      required: true,
+    },
   },
   {
     timestamps: true,

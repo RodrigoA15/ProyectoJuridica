@@ -3,7 +3,7 @@ import Radicado from "../../models/radicados.js";
 export const getRadicados = async (req, res) => {
   try {
     const radicados = await Radicado.find().populate(
-      "id_procedencia numero_radicado id_canal_entrada id_asunto id_tipificacion id_entidad"
+      "id_procedencia numero_radicado id_canal_entrada id_asunto id_tipificacion id_entidad id_departamento"
     );
     if (radicados.length > 0) {
       res.status(200).json(radicados);
@@ -26,7 +26,7 @@ export const createRadicados = async (req, res) => {
       id_asunto,
       id_tipificacion,
       id_entidad,
-      id_usuario,
+      id_departamento,
     } = req.body;
 
     const newRadicado = new Radicado({
@@ -37,7 +37,7 @@ export const createRadicados = async (req, res) => {
       id_asunto,
       id_tipificacion,
       id_entidad,
-      id_usuario,
+      id_departamento,
     });
 
     const saveRadicado = await newRadicado.save();
@@ -73,11 +73,8 @@ export const updateRadicados = async (req, res) => {
       id_asunto,
       id_tipificacion,
       id_entidad,
-      id_usuario,
+      id_departamento,
     } = req.body;
-
-    if (!numero_radicado)
-      return res.status(400).json("Este campo es obligatorio");
 
     const updatedRadicado = await Radicado.findByIdAndUpdate(
       req.params.id_radicado,
@@ -89,7 +86,7 @@ export const updateRadicados = async (req, res) => {
         id_asunto,
         id_tipificacion,
         id_entidad,
-        id_usuario,
+        id_departamento,
       },
       { new: true }
     );
@@ -100,7 +97,6 @@ export const updateRadicados = async (req, res) => {
     return res.status(200).json("Actualizado correctamente");
   } catch (error) {
     res.status(500).json(error);
-    
   }
 };
 

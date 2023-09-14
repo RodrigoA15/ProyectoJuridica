@@ -12,10 +12,22 @@ const ProcedenciaSchema = new mongoose.Schema(
       required: true,
     },
 
+    tipo_identificacion: {
+      type: String,
+      enum: ["CC", "CE", "PEP", "PPT"],
+      required: true,
+    },
+
     numero_identificacion: {
       type: Number,
       required: true,
       unique: true,
+    },
+
+    contacto: {
+      type: String,
+      required: true,
+      enum: ["direccion", "telefono", "correo"],
     },
   },
   {

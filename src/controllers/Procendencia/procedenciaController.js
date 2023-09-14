@@ -17,19 +17,29 @@ export const getProcedencia = async (req, res) => {
 
 export const createProcedencia = async (req, res) => {
   try {
-    const { nombre, apellido, numero_identificacion } = req.body;
+    const {
+      nombre,
+      apellido,
+      numero_identificacion,
+      tipo_identificacion,
+      contacto,
+    } = req.body;
     const newProcedencia = new Procedencia({
       nombre,
       apellido,
       numero_identificacion,
+      tipo_identificacion,
+      contacto,
     });
 
     const saveProcedencia = await newProcedencia.save();
 
     if (saveProcedencia) {
       res.status(200).json("Procedencia Creada Correctamente");
+      console.log("Procedencia Creada Correctamente");
     } else {
       res.json("NO se pudo crear la procedencia");
+      console.log("Ploaca");
     }
   } catch (error) {
     res.status(500).json(error);
@@ -44,9 +54,9 @@ export const getProcedenciaById = async (req, res, next) => {
     });
 
     if (procedencia) {
-      res.status(200).json(procedencia);
+      res.status(200).json([procedencia]);
     } else {
-      next();
+      res.status(404).json("No se encontro la procedencia");
     }
   } catch (error) {
     res.status(500).json(error);
