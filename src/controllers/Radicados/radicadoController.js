@@ -1,3 +1,4 @@
+import { response } from "express";
 import Radicado from "../../models/radicados.js";
 
 export const getRadicados = async (req, res) => {
@@ -113,5 +114,40 @@ export const deleteRadicado = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).json(error);
+  }
+};
+
+//Consulta por departamentos
+//Sistemas >>>>>>>
+export const departamentoRadicado = async (req, res) => {
+  try {
+    const response = await Radicado.find({
+      id_departamento: "64f75b9e404987956278a7a1",
+    }).populate("id_departamento");
+
+    if (!response.length > 0)
+      return res
+        .status(404)
+        .json("No se encontraron resultados en la busqueda");
+    return res.status(200).json(response);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+//Juridica >>>>>>
+export const juridicaRadicado = async (req, res) => {
+  try {
+    const response = await Radicado.find({
+      id_departamento: "65047a632785185cd986701e",
+    }).populate("id_departamento");
+
+    if (!response.length > 0)
+      return res
+        .status(404)
+        .json("No se encontraron resultados en la busqueda");
+    return res.status(200).json(response);
+  } catch (error) {
+    console.log(error);
   }
 };

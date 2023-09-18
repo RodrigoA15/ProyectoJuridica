@@ -39,19 +39,19 @@ export const isAdmin = async (req, res, next) => {
   }
 };
 
-export const isCoordinador = async (req, res, next) => {
+export const isJuridica = async (req, res, next) => {
   try {
     const user = await User.findById(req.user.id);
 
     const rol = await Roles.find({ _id: { $in: user.role } });
 
     for (let i = 0; i < rol.length; i++) {
-      if (rol[i].role === "coordinador") {
+      if (rol[i].nombre_rol === "Juridica") {
         next();
         return;
       }
     }
-    return res.status(403).json("Not Permission Denied");
+    return res.status(403).json("No tienes permiso");
   } catch (error) {
     res.status(500).json(error);
   }

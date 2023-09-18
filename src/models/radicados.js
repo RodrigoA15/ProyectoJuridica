@@ -48,6 +48,11 @@ const RadicadoSchema = new mongoose.Schema(
       ref: "Departamento",
       required: true,
     },
+
+    estado_radicado: {
+      type: Number,
+      required: true,
+    },
   },
   {
     timestamps: true,

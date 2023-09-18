@@ -3,7 +3,9 @@ import mongoose from "mongoose";
 export const ConnectionMongo = async () => {
   try {
     await mongoose
-      .connect("mongodb://127.0.0.1:27017/projectoJuridica")
+      .connect("mongodb://127.0.0.1:27017/projectoJuridica", {
+        useNewUrlParser: true,
+      })
       .then(() => {
         console.log("Connection to MongoDB established");
       })

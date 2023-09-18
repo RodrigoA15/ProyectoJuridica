@@ -17,13 +17,17 @@ import * as RadicadosController from "../controllers/Radicados/radicadoControlle
 //Authentication
 import * as Register from "../controllers/Auth/register.auth.js";
 import * as Login from "../controllers/Auth/login.auth.js";
-import { authRequired, isAdmin } from "../middlewares/validateToken.js";
+import {
+  authRequired,
+  isAdmin,
+  isJuridica,
+} from "../middlewares/validateToken.js";
 
 const router = Router();
 
 //Departamentos>>>>>>>>>>
-router.get("/departamento", getDepartamento);
-router.post("/departamento", authRequired, createDepartamento);
+router.get("/departamento", authRequired, isAdmin, getDepartamento);
+router.post("/departamento", authRequired, isAdmin, createDepartamento);
 router.get("/departamento/:id_departamento", authRequired, getDepartamentoById);
 router.put("/departamento/:id_departamento", authRequired, updateDepartamento);
 router.delete(
@@ -136,6 +140,20 @@ router.delete(
   "/radicados/:id_radicado",
   authRequired,
   RadicadosController.deleteRadicado
+);
+
+//Consulta por departamentos>>>>
+router.get(
+  "/depsistemas_radicados",
+  authRequired,
+  RadicadosController.departamentoRadicado
+);
+
+router.get(
+  "/depjuridica_radicados",
+  authRequired,
+  isJuridica,
+  RadicadosController.juridicaRadicado
 );
 
 //Authentication
