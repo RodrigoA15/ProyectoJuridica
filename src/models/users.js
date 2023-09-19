@@ -22,13 +22,11 @@ const UserSchema = new mongoose.Schema({
   departamento: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Departamento",
-    required: true,
   },
 
   role: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Role",
-    required: true,
   },
 });
 

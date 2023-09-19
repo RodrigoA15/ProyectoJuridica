@@ -8,10 +8,14 @@ export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ email }).populate("role");
-    if (!user) return res.status(404).json("No se encontro el correo");
+    if (!user)
+      return res
+        .status(404)
+        .json({ message: "Este correo no esta registrado" });
     const matchPassword = await bcrypt.compare(password, user.password);
 
-    if (!matchPassword) return res.status(404).json("Contraseña incorrecta");
+    if (!matchPassword)
+      return res.status(400).send({ message: "Contraseña incorrecta" });
 
     const token = await createToken({
       id: user._id,

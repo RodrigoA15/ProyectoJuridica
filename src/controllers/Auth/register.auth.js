@@ -7,7 +7,8 @@ export const register = async (req, res) => {
     const { username, email, password, departamento, role } = req.body;
     const foundEmail = await User.findOne({ email });
 
-    if (foundEmail) res.status(400).json(["Correo Ya esta registrado"]);
+    if (foundEmail)
+      res.status(400).json({ message: "Este correo ya esta registrado" });
 
     const passwordHash = await bcrypt.hash(password, 10);
     const newUser = new User({
@@ -27,9 +28,6 @@ export const register = async (req, res) => {
     console.log(token);
     res.status(200).json(savedUser);
   } catch (error) {
-    res.status(500).json(error);
     console.log(error);
   }
 };
-
-
