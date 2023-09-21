@@ -8,7 +8,6 @@ const router = Router();
 router.get(
   "/departamento",
   authRequired,
-  isAdmin,
   DepartamentoController.getDepartamento
 );
 router.post(
@@ -32,5 +31,9 @@ router.delete(
   authRequired,
   DepartamentoController.deleteDepartamento
 );
+
+//Consultas usuarios por departamento
+
+router.get("/legal_user", authRequired, DepartamentoController.UserDepartament);
 
 export default router;

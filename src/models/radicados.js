@@ -50,8 +50,9 @@ const RadicadoSchema = new mongoose.Schema(
     },
 
     estado_radicado: {
-      type: Number,
+      type: String,
       required: true,
+      enum: ["Pendientes", "Asignados", "Respondidos"],
     },
   },
   {

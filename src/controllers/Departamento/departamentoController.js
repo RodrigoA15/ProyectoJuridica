@@ -1,4 +1,5 @@
 import Departamento from "../../models/departamentos.js";
+import User from "../../models/users.js";
 
 export const getDepartamento = async (req, res) => {
   try {
@@ -79,5 +80,22 @@ export const deleteDepartamento = async (req, res) => {
     }
   } catch (error) {
     res.status(500).json(`Error de servidor ${error}`);
+  }
+};
+
+//Consultas usuarios por deparatamento
+export const UserDepartament = async (req, res) => {
+  try {
+    const response = await User.find({
+      departamento: "65047a632785185cd986701e",
+    }).populate("departamento");
+    if (response.length > 0) {
+      res.status(200).json(response);
+    } else {
+      res.status(404).json("No se encontraron usuarios");
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json(error);
   }
 };

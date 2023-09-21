@@ -28,6 +28,7 @@ export const createRadicados = async (req, res) => {
       id_tipificacion,
       id_entidad,
       id_departamento,
+      estado_radicado,
     } = req.body;
 
     const newRadicado = new Radicado({
@@ -39,6 +40,7 @@ export const createRadicados = async (req, res) => {
       id_tipificacion,
       id_entidad,
       id_departamento,
+      estado_radicado,
     });
 
     const saveRadicado = await newRadicado.save();
@@ -123,6 +125,7 @@ export const departamentoRadicado = async (req, res) => {
   try {
     const response = await Radicado.find({
       id_departamento: "64f75b9e404987956278a7a1",
+      estado_radicado: "Pendientes",
     }).populate("id_departamento");
 
     if (!response.length > 0)
@@ -140,6 +143,7 @@ export const juridicaRadicado = async (req, res) => {
   try {
     const response = await Radicado.find({
       id_departamento: "65047a632785185cd986701e",
+      estado_radicado: "Pendientes",
     }).populate("id_departamento");
 
     if (!response.length > 0)
