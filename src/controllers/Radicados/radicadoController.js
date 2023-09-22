@@ -1,4 +1,3 @@
-import { response } from "express";
 import Radicado from "../../models/radicados.js";
 
 export const getRadicados = async (req, res) => {
@@ -56,7 +55,7 @@ export const createRadicados = async (req, res) => {
 export const getByIdRadicados = async (req, res) => {
   try {
     const radicado = await Radicado.findById(req.params.id_radicado).populate(
-      "id_procedencia numero_radicado id_canal_entrada id_asunto id_tipificacion id_entidad"
+      "id_procedencia numero_radicado id_canal_entrada id_asunto id_tipificacion id_entidad id_usuario"
     );
 
     if (!radicado) return res.status(404).json("No se encontro el radicado");
@@ -68,28 +67,16 @@ export const getByIdRadicados = async (req, res) => {
 
 export const updateRadicados = async (req, res) => {
   try {
-    const {
-      numero_radicado,
-      fecha_radicado,
-      id_procedencia,
-      id_canal_entrada,
-      id_asunto,
-      id_tipificacion,
-      id_entidad,
-      id_departamento,
-    } = req.body;
+    const { id_usuario, estado_radicado } = req.body;
+
+    if (!id_usuario || !estado_radicado)
+      return res.status(400).json("Campos requeridos");
 
     const updatedRadicado = await Radicado.findByIdAndUpdate(
       req.params.id_radicado,
       {
-        numero_radicado,
-        fecha_radicado,
-        id_procedencia,
-        id_canal_entrada,
-        id_asunto,
-        id_tipificacion,
-        id_entidad,
-        id_departamento,
+        id_usuario,
+        estado_radicado,
       },
       { new: true }
     );
@@ -119,13 +106,14 @@ export const deleteRadicado = async (req, res) => {
   }
 };
 
-//Consulta por departamentos
+//Consulta estado radicado por departamentos
 //Sistemas >>>>>>>
+
 export const departamentoRadicado = async (req, res) => {
   try {
     const response = await Radicado.find({
       id_departamento: "64f75b9e404987956278a7a1",
-      estado_radicado: "Pendientes",
+      estado_radicado: "Pendiente",
     }).populate("id_departamento");
 
     if (!response.length > 0)
@@ -143,7 +131,24 @@ export const juridicaRadicado = async (req, res) => {
   try {
     const response = await Radicado.find({
       id_departamento: "65047a632785185cd986701e",
-      estado_radicado: "Pendientes",
+      estado_radicado: "Pendiente",
+    }).populate("id_departamento");
+
+    if (!response.length > 0)
+      return res
+        .status(404)
+        .json("No se encontraron resultados en la busqueda");
+    return res.status(200).json(response);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const juridicaRadicadoPendientes = async (req, res) => {
+  try {
+    const response = await Radicado.find({
+      id_departamento: "65047a632785185cd986701e",
+      estado_radicado: "Asignados",
     }).populate("id_departamento");
 
     if (!response.length > 0)
