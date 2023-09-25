@@ -64,27 +64,26 @@ export const getByIdRadicados = async (req, res) => {
     res.status(500).json(error);
   }
 };
-
+//Actualizar estado
 export const updateRadicados = async (req, res) => {
   try {
-    const { id_usuario, estado_radicado } = req.body;
+    const { estado_radicado } = req.body;
 
-    if (!id_usuario || !estado_radicado)
-      return res.status(400).json("Campos requeridos");
+    if (!estado_radicado) return res.status(400).json("Campos requeridos");
 
-    const updatedRadicado = await Radicado.findByIdAndUpdate(
+    const response = await Radicado.findByIdAndUpdate(
       req.params.id_radicado,
       {
-        id_usuario,
         estado_radicado,
       },
       { new: true }
     );
 
-    if (!updatedRadicado)
-      return res.status(500).json("No se encontro el radicado");
-
-    return res.status(200).json("Actualizado correctamente");
+    if (response) {
+      res.status(200).json("Asignado correctamente");
+    } else {
+      res.status(400).json("No se pudo asignar");
+    }
   } catch (error) {
     res.status(500).json(error);
   }
@@ -114,7 +113,7 @@ export const departamentoRadicado = async (req, res) => {
     const response = await Radicado.find({
       id_departamento: "64f75b9e404987956278a7a1",
       estado_radicado: "Pendiente",
-    }).populate("id_departamento");
+    }).populate("id_departamento id_asunto");
 
     if (!response.length > 0)
       return res
@@ -132,24 +131,7 @@ export const juridicaRadicado = async (req, res) => {
     const response = await Radicado.find({
       id_departamento: "65047a632785185cd986701e",
       estado_radicado: "Pendiente",
-    }).populate("id_departamento");
-
-    if (!response.length > 0)
-      return res
-        .status(404)
-        .json("No se encontraron resultados en la busqueda");
-    return res.status(200).json(response);
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const juridicaRadicadoPendientes = async (req, res) => {
-  try {
-    const response = await Radicado.find({
-      id_departamento: "65047a632785185cd986701e",
-      estado_radicado: "Asignados",
-    }).populate("id_departamento");
+    }).populate("id_departamento id_asunto");
 
     if (!response.length > 0)
       return res

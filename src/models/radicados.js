@@ -49,17 +49,6 @@ const RadicadoSchema = new mongoose.Schema(
       required: true,
     },
 
-    // estado_radicado: {
-    //   type: String,
-    //   required: true,
-    //   enum: ["Pendientes", "Asignados", "Respondidos"],
-    // },
-
-    id_usuario: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Usuario",
-    },
-
     estado_radicado: {
       type: mongoose.Schema.Types.String,
       ref: "EstadoRadicado",
