@@ -2,7 +2,10 @@ import Asignacion from "../../models/asignar_radicado.js";
 
 export const getAllAsignacion = async (req, res) => {
   try {
-    const response = await Asignacion.find({});
+    const response = await Asignacion.find({}).populate([
+      { path: "id_usuario" },
+      { path: "id_radicado" },
+    ]);
 
     if (response.length > 0) return res.status(200).json(response);
     return res.status(404).json("No se encontraron radicados");
