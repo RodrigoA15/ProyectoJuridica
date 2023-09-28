@@ -40,4 +40,17 @@ router.get(
   RadicadosController.juridicaRadicado
 );
 
+router.get(
+  "/juridica_respondidos",
+  authRequired,
+  isJuridica,
+  RadicadosController.juridicaRadicadoRespondido
+);
+
+//AllRadicadosPendientes
+router.get("/radicados_pendientes", RadicadosController.allRadicadosPendientes);
+//AllRadicadosAsignados
+router.get("/radicados_asignados", RadicadosController.allRadicadosAsignados);
+//AllRadicadoRespuestas
+router.get("/radicado_respuestas", RadicadosController.allRadicadosRespondidos);
 export default router;

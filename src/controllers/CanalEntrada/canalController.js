@@ -74,3 +74,30 @@ export const deleteCanal = async (req, res) => {
     res.status(500).json(`Error de sevidor ${error}`);
   }
 };
+
+//Grafica
+
+export const canales = async (req, res) => {
+  try {
+    const response = await Canal.aggregate([
+      {
+        $match: {
+          nombre_canal: { $in: ["PRESENCIAL"] },
+        },
+      },
+      {
+        $group: {
+          _id: "$nombre_canal",
+        },
+      },
+    ]);
+
+    if (response.length > 0) {
+      res.status(200).json(response);
+    } else {
+      res.status(404).json("No hay datos");
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};

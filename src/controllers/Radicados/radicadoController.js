@@ -16,6 +16,53 @@ export const getRadicados = async (req, res) => {
   }
 };
 
+export const allRadicadosPendientes = async (req, res) => {
+  try {
+    const response = await Radicado.find({
+      estado_radicado: { $eq: "Pendiente" },
+    });
+    if (response.length > 0) {
+      res.status(200).json(response);
+    } else {
+      res.status(404).json("No hay radicados Pendientes");
+    }
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
+export const allRadicadosAsignados = async (req, res) => {
+  try {
+    const response = await Radicado.find({
+      estado_radicado: { $eq: "Asignados" },
+    });
+
+    if (response.length > 0) {
+      res.status(200).json(response);
+    } else {
+      res.status(404).json("No se encontraron radicados Asignados");
+    }
+  } catch (error) {
+    res.status(500).json(`error all adicados Asignados`, error);
+  }
+};
+
+export const allRadicadosRespondidos = async (req, res) => {
+  try {
+    const response = await Radicado.find({
+      estado_radicado: { $eq: "Respuesta" },
+    });
+
+    if (response.length > 0) {
+      res.status(200).json(response);
+    } else {
+      res.status(404).json("No se encontraton radicados respondidos");
+    }
+  } catch (error) {
+    res.json("error en all Radicados Respuestos", error);
+  }
+};
+
 export const createRadicados = async (req, res) => {
   try {
     const {
@@ -142,3 +189,21 @@ export const juridicaRadicado = async (req, res) => {
     console.log(error);
   }
 };
+
+export const juridicaRadicadoRespondido = async (req, res) => {
+  try {
+    const response = await Radicado.find({
+      id_departamento: "65047a632785185cd986701e",
+      estado_radicado: "Respuesta",
+    }).populate("id_departamento id_asunto");
+
+    if (!response.length > 0)
+      return res
+        .status(404)
+        .json("No se encontraron resultados en la busqueda");
+    return res.status(200).json(response);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
