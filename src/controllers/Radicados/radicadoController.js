@@ -246,14 +246,16 @@ export const queryChartEntidad = async (req, res) => {
 
 export const queryChartRadicados = async (req, res) => {
   try {
+    const fecha_radicado = "2023-09-28T00:00:00.000+00:00";
     const response = await Radicado.countDocuments({
       estado_radicado: { $eq: "Respuesta" },
+      fecha_radicado: fecha_radicado,
     }).exec();
 
     console.log(response);
 
     if (response) {
-      res.status(200).json([{ respuestas: response }]);
+      res.status(200).json([{ respuestas: response, fecha: fecha_radicado }]);
     } else {
       res.status(404).json("No se encontraron resultados");
     }
