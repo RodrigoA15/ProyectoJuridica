@@ -10,7 +10,6 @@ router.post("/canal", authRequired, CanalController.createCanal);
 router.get("/canal/:id_canal", authRequired, CanalController.getCanalById);
 router.put("/canal/:id_canal", authRequired, CanalController.updateCanal);
 router.delete("/canal/:id_canal", authRequired, CanalController.deleteCanal);
-//Grafica
-router.get("/grafica_canal", CanalController.canales);
+
 
 export default router;

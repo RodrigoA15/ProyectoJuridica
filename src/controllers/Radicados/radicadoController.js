@@ -1,4 +1,5 @@
 import Radicado from "../../models/radicados.js";
+import Entidad from "../../models/entidad.js";
 
 export const getRadicados = async (req, res) => {
   try {
@@ -207,3 +208,56 @@ export const juridicaRadicadoRespondido = async (req, res) => {
   }
 };
 
+//Grafica entidad
+
+export const queryChartEntidad = async (req, res) => {
+  try {
+    const entidad1 = await Entidad.findOne({ nombre_entidad: "Movit" });
+    const entidad2 = await Entidad.findOne({ nombre_entidad: "Secretaria" });
+    const fecha_radicado = "2023-09-26T00:00:00.000Z";
+
+    const countEntidad1 = await Radicado.countDocuments({
+      id_entidad: entidad1._id,
+      fecha_radicado: fecha_radicado,
+    }).exec();
+
+    const countEntidad2 = await Radicado.countDocuments({
+      id_entidad: entidad2._id,
+      fecha_radicado: "2023-09-29T00:00:00.000Z",
+    }).exec();
+
+    console.log("Count for entidad 1:", countEntidad1);
+    console.log("Count for entidad 2:", countEntidad2);
+    console.log("Count for entidad 2:", fecha_radicado);
+
+    res.status(200).json([
+      {
+        Movit: countEntidad1,
+        Secretaria: countEntidad2,
+        fecha: fecha_radicado,
+      },
+    ]);
+  } catch (error) {
+    res.status(500).json(`Error grafica entidad: ${error}`);
+  }
+};
+
+//Grafica Radicados
+
+export const queryChartRadicados = async (req, res) => {
+  try {
+    const response = await Radicado.countDocuments({
+      estado_radicado: { $eq: "Respuesta" },
+    }).exec();
+
+    console.log(response);
+
+    if (response) {
+      res.status(200).json([{ respuestas: response }]);
+    } else {
+      res.status(404).json("No se encontraron resultados");
+    }
+  } catch (error) {
+    res.status().json(`error grafica radicados ${error}`);
+  }
+};
