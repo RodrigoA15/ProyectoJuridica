@@ -55,7 +55,10 @@ router.get("/radicados_asignados", RadicadosController.allRadicadosAsignados);
 router.get("/radicado_respuestas", RadicadosController.allRadicadosRespondidos);
 //Chart Entidad
 router.get("/chart_entidad", RadicadosController.queryChartEntidad);
+router.get("/chart_entidad2", RadicadosController.chartEntidad);
 //Chart Radicados
 router.get("/chart_radicados", RadicadosController.queryChartRadicados);
+//Chart Canal Entrada
+router.get("/chart_canal", RadicadosController.queryChartCanalEntrada);
 
 export default router;
