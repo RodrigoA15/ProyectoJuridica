@@ -24,10 +24,15 @@ const ProcedenciaSchema = new mongoose.Schema(
       unique: true,
     },
 
-    contacto: {
+    tipo_contacto: {
       type: String,
       required: true,
       enum: ["direccion", "telefono", "correo"],
+    },
+
+    info_contacto: {
+      type: String,
+      required: true,
     },
   },
   {

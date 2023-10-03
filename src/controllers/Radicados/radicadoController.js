@@ -70,6 +70,7 @@ export const createRadicados = async (req, res) => {
     const {
       numero_radicado,
       fecha_radicado,
+      cantidad_respuesta,
       id_procedencia,
       id_canal_entrada,
       id_asunto,
@@ -82,6 +83,7 @@ export const createRadicados = async (req, res) => {
     const newRadicado = new Radicado({
       numero_radicado,
       fecha_radicado,
+      cantidad_respuesta,
       id_procedencia,
       id_canal_entrada,
       id_asunto,

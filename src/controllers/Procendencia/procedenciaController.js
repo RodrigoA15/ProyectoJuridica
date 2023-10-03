@@ -22,14 +22,16 @@ export const createProcedencia = async (req, res) => {
       apellido,
       numero_identificacion,
       tipo_identificacion,
-      contacto,
+      tipo_contacto,
+      info_contacto,
     } = req.body;
     const newProcedencia = new Procedencia({
       nombre,
       apellido,
       numero_identificacion,
       tipo_identificacion,
-      contacto,
+      tipo_contacto,
+      info_contacto,
     });
 
     const saveProcedencia = await newProcedencia.save();

@@ -13,6 +13,12 @@ const RadicadoSchema = new mongoose.Schema(
       required: true,
     },
 
+    cantidad_respuesta: {
+      type: Number,
+      required: true,
+    },
+
+    //Relaciones>>>>
     id_procedencia: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Procedencia",
