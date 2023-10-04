@@ -12,6 +12,7 @@ import routeRoles from "./src/routes/Roles/roles.router.js";
 import routeTipificacion from "./src/routes/Tipificacion/tipificacion.router.js";
 import routeEstado from "./src/routes/EstadoRadicados/estadoRdos.router.js";
 import routeAsiganacion from "./src/routes/Asignaciones/asignar.router.js";
+import routerRespuesta from "./src/routes/RespuestaRadicados/respuesta.router.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 
@@ -38,5 +39,6 @@ app.use(`${ruta}/roles`, routeRoles);
 app.use(`${ruta}/tipificacion`, routeTipificacion);
 app.use(`${ruta}`, routeEstado);
 app.use(`${ruta}`, routeAsiganacion);
+app.use(`${ruta}`, routerRespuesta);
 
 export default app;
