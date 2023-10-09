@@ -1,5 +1,9 @@
 import Respuesta from "../../models/respuesta_radicado.js";
 import multer from "multer";
+import path from "path";
+import SambaClient from "samba-client";
+import Departamento from "../../models/departamentos.js";
+import Asunto from "../../models/asunto.js";
 
 export const getAllRespuestas = async (req, res) => {
   try {
@@ -22,63 +26,74 @@ export const getAllRespuestas = async (req, res) => {
 
 export const createRespuesta = async (req, res) => {
   try {
-    const { id_asignacion, numero_radicado_respuesta } = req.body;
+    let nombreArchivo;
+    let urlArchivos;
 
-    const newRespuesta = new Respuesta({
-      id_asignacion,
-      numero_radicado_respuesta,
-    });
+    // Define Samba share options
+    const sambaOptions = {
+      address: "\\\\192.168.28.100\\programacion y datos",
+      username: "",
+      password: "",
+      domain: "WORKGROUP",
+      maxProtocol: "SMB3",
+      maskCmd: true,
+    };
 
-    const savedRespuesta = await newRespuesta.save();
+    new SambaClient(sambaOptions);
 
-    if (savedRespuesta) {
-      res.status(200).json("Respuesta Creada");
-    } else {
-      res.status(500).json("Hubo un error al crear la respuesta");
-    }
-  } catch (error) {
-    res.status(500).json(`Error createRespuesta ${error}`);
-    console.log(error);
-  }
-};
+    // Path to save the PDF file in the Samba share
+    const pathPdf =
+      "\\\\192.168.28.100\\programacion y datos\\RodrigoJR\\PDFJuridica";
 
-export const savedFilePDF = async (req, res) => {
-  try {
     const storage = multer.diskStorage({
       destination: (req, file, cb) => {
-        cb(null, "C:\\Users\\SISTEMAS\\Documents");
+        cb(null, pathPdf);
       },
-
       filename: (req, file, cb) => {
-        // Guarda el archivo con el nombre original
-        cb(null, file.originalname);
+        nombreArchivo = file.originalname;
+        cb(null, nombreArchivo);
       },
     });
 
     const upload = multer({
       storage,
-      dest: "./Documents",
       fileFilter: (req, file, cb) => {
         const filetypes = /pdf/;
         const mimetype = filetypes.test(file.mimetype);
-
         if (mimetype) {
           return cb(null, true);
         }
-
-        cb("Tipo de archivo no valido");
+        cb(new Error("Archivo invalido "));
       },
-    });
+    }).single("respuesta_pdf");
 
-    upload.single("respuesta_pdf")(req, res, async (err) => {
+    upload(req, res, async (err) => {
       if (err) {
-        return res.status(500).json({ message: "Error creating filed" + err });
+        return res
+          .status(500)
+          .json({ error: "Error creating file: " + err.message });
       }
 
-      res.status(200).json({ message: "Archivo cargado exitosamente" });
+      urlArchivos = path.join(pathPdf, nombreArchivo);
+      const { id_asignacion, numero_radicado_respuesta } = req.body;
+
+      const newRespuesta = new Respuesta({
+        id_asignacion,
+        numero_radicado_respuesta,
+        urlArchivo: urlArchivos,
+      });
+
+      const savedRespuesta = await newRespuesta.save();
+
+      if (savedRespuesta) {
+        res.status(200).json({ message: "Respuesta creada" });
+      } else {
+        res.status(500).json({ error: "Hubo un error al crear la respuesta" });
+      }
     });
   } catch (error) {
-    console.log(error);
+    console.error("Error in createRespuesta:", error);
+    res.status(500).json({ error: `Error createRespuesta ${error.message}` });
   }
 };
 
@@ -104,5 +119,50 @@ export const respuestasporRadicado = async (req, res) => {
     }
   } catch (error) {
     res.status(500).json(`error respuestas por radicado ${error}`);
+    console.log(error);
+  }
+};
+
+export const respuestasJuridica = async (req, res) => {
+  try {
+    const departamento = await Departamento.findOne({
+      nombre_departamento: "Juridica",
+    });
+
+    if (!departamento) {
+      return res.status(404).json("No se encontró el departamento 'Juridica'");
+    }
+
+    const response = await Respuesta.find({})
+      .populate({
+        path: "id_asignacion",
+        populate: [
+          {
+            path: "id_radicado",
+            match: { id_departamento: departamento._id },
+            populate: {
+              path: "id_asunto",
+              select: "nombre_asunto",
+            },
+          },
+          {
+            path: "id_usuario",
+            select: "username",
+          },
+        ],
+      })
+      .lean();
+
+    const filteredResponses = response.filter(
+      (r1) => r1.id_asignacion.id_radicado !== null
+    );
+
+    if (filteredResponses.length > 0) {
+      res.status(200).json(filteredResponses);
+    } else {
+      res.status(404).json("No se encontraron respuestas");
+    }
+  } catch (error) {
+    res.status(500).json(`Error en respuestasJuridica: ${error.message}`);
   }
 };
