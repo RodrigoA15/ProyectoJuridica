@@ -5,6 +5,8 @@ import {
   isJuridica,
   isAdmin,
 } from "../../middlewares/validateToken.js";
+// import { validateSchema } from "../../middlewares/validator.js";
+// import { radicadoSchema } from "../../schemas/radicadosSchema.js";
 
 const router = Router();
 
