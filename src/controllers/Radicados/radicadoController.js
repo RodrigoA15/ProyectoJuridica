@@ -194,8 +194,6 @@ export const juridicaRadicado = async (req, res) => {
   }
 };
 
-
-
 //Grafica entidad
 
 export const queryChartEntidad = async (req, res) => {
@@ -357,6 +355,30 @@ export const queryChartCanalEntrada = async (req, res) => {
     res.status(200).json(countCanal);
   } catch (error) {
     res.status(500).json(`error grafica Canal Entrada ${error}`);
+    console.log(error);
+  }
+};
+
+//Actualizacion de departamentos  (reasignacion de radicado)>>>
+
+export const updateDepartamento = async (req, res) => {
+  try {
+    const { id_departamento } = req.body;
+    const response = await Radicado.findByIdAndUpdate(
+      req.params.id_radicado,
+      {
+        id_departamento,
+      },
+      { new: true }
+    );
+
+    if (response) {
+      res.status(200).json("Reasignado Correctamente");
+    } else {
+      res.status(400).json("No se pudo Reasignar");
+    }
+  } catch (error) {
+    res.status(500).json(`error actualizacion departamento ${error}`);
     console.log(error);
   }
 };

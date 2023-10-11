@@ -54,5 +54,6 @@ export const isJuridica = async (req, res, next) => {
     return res.status(403).json("No tienes permiso");
   } catch (error) {
     res.status(500).json(error);
+    console.error(error);
   }
 };
