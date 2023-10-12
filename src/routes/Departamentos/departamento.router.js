@@ -13,7 +13,6 @@ router.get(
 router.post(
   "/departamento",
   authRequired,
-  isAdmin,
   DepartamentoController.createDepartamento
 );
 router.get(

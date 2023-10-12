@@ -5,6 +5,12 @@ const AsuntoSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+
+    id_departamento: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Departamento",
+      required: true,
+    },
   },
   {
     timestamps: true,

@@ -1,19 +1,24 @@
 import Asunto from "../../models/asunto.js";
+import Departamento from "../../models/departamentos.js";
 
 export const getAsunto = async (req, res) => {
-  const asunto = await Asunto.find();
+  try {
+    const asunto = await Asunto.find().populate("id_departamento");
 
-  if (asunto.length > 0) {
-    res.status(200).json(asunto);
-  } else {
-    res.status(404).json("No hay asuntos");
+    if (asunto.length > 0) {
+      res.status(200).json(asunto);
+    } else {
+      res.status(404).json("No hay asuntos");
+    }
+  } catch (error) {
+    res.status(500).json(`error de servidor Asuntos ${error}`);
   }
 };
 
 export const createAsunto = async (req, res) => {
   try {
-    const { nombre_asunto } = req.body;
-    const newAsunto = new Asunto({ nombre_asunto });
+    const { nombre_asunto, id_departamento } = req.body;
+    const newAsunto = new Asunto({ nombre_asunto, id_departamento });
 
     const saveAsunto = await newAsunto.save();
     if (saveAsunto) {
@@ -70,5 +75,25 @@ export const deleteAsunto = async (req, res) => {
     if (deleteAsunto) return res.status(200).json("Eliminado Correctamente");
   } catch (error) {
     res.status(500).json(`error de servidor ${error}`);
+  }
+};
+
+//Asuntos por departamento
+
+//Juridica>>>>>
+export const getAsuntosByDepartamento = async (req, res) => {
+  try {
+    const response = await Asunto.find({
+      id_departamento: { $eq: req.params.id_departamento },
+    });
+    console.log(response);
+
+    if (response.length > 0) {
+      res.status(200).json(response);
+    } else {
+      res.status(404).json("No se encontraron resultados en la busqueda");
+    }
+  } catch (error) {
+    res.status(500).json(`error asuntos Departamento ${error}`);
   }
 };

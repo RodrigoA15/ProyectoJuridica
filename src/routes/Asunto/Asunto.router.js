@@ -15,5 +15,10 @@ router.delete(
   authRequired,
   AsuntoController.deleteAsunto
 );
+//Asuntos por departamento
+router.get(
+  "/asuntos_departamento/:id_departamento",
+  AsuntoController.getAsuntosByDepartamento
+);
 
 export default router;
