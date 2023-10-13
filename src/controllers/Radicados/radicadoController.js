@@ -1,6 +1,7 @@
 import Radicado from "../../models/radicados.js";
 import Entidad from "../../models/entidad.js";
 import Canal from "../../models/canal_entrada.js";
+import Departamento from "../../models/departamentos.js";
 
 export const getRadicados = async (req, res) => {
   try {
@@ -180,7 +181,7 @@ export const departamentoRadicado = async (req, res) => {
 export const juridicaRadicado = async (req, res) => {
   try {
     const response = await Radicado.find({
-      id_departamento: "65047a632785185cd986701e",
+      id_departamento: { $eq: req.params.id_departamento },
       estado_radicado: "Pendiente",
     }).populate("id_departamento id_asunto");
 

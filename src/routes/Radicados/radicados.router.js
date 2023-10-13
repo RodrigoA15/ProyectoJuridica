@@ -1,10 +1,6 @@
 import { Router } from "express";
 import * as RadicadosController from "../../controllers/Radicados/radicadoController.js";
-import {
-  authRequired,
-  isJuridica,
-  isAdmin,
-} from "../../middlewares/validateToken.js";
+import { authRequired } from "../../middlewares/validateToken.js";
 // import { validateSchema } from "../../middlewares/validator.js";
 // import { radicadoSchema } from "../../schemas/radicadosSchema.js";
 
@@ -36,9 +32,8 @@ router.get(
 );
 
 router.get(
-  "/depjuridica_radicados",
+  "/depjuridica_radicados/:id_departamento",
   authRequired,
-  isJuridica,
   RadicadosController.juridicaRadicado
 );
 

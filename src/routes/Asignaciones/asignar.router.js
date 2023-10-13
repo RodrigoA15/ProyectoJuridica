@@ -9,7 +9,6 @@ router.post("/asignacion", AsignacionController.createAsignacion);
 router.get(
   "/asignaciones",
   authRequired,
-  isJuridica,
   AsignacionController.juridicaRadicadoAsignados
 );
 
