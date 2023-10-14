@@ -125,21 +125,13 @@ export const respuestasporRadicado = async (req, res) => {
 
 export const respuestasJuridica = async (req, res) => {
   try {
-    const departamento = await Departamento.findOne({
-      nombre_departamento: "Juridica",
-    });
-
-    if (!departamento) {
-      return res.status(404).json("No se encontró el departamento 'Juridica'");
-    }
-
     const response = await Respuesta.find({})
       .populate({
         path: "id_asignacion",
         populate: [
           {
             path: "id_radicado",
-            match: { id_departamento: departamento._id },
+            match: { id_departamento: req.params.id_departamento },
             populate: {
               path: "id_asunto",
               select: "nombre_asunto",

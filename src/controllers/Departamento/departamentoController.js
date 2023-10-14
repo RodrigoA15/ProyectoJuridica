@@ -87,7 +87,7 @@ export const deleteDepartamento = async (req, res) => {
 export const UserDepartament = async (req, res) => {
   try {
     const response = await User.find({
-      departamento: "65047a632785185cd986701e",
+      departamento: req.params.id_departamento,
     }).populate("departamento");
     if (response.length > 0) {
       res.status(200).json(response);

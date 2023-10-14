@@ -7,7 +7,7 @@ const router = Router();
 router.get("/asignacion", AsignacionController.getAllAsignacion);
 router.post("/asignacion", AsignacionController.createAsignacion);
 router.get(
-  "/asignaciones",
+  "/asignaciones/:id_departamento",
   authRequired,
   AsignacionController.juridicaRadicadoAsignados
 );

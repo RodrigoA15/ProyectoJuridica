@@ -42,7 +42,10 @@ export const juridicaRadicadoAsignados = async (req, res) => {
       .populate([
         {
           path: "id_radicado",
-          match: { estado_radicado: "Asignados" },
+          match: {
+            estado_radicado: "Asignados",
+            id_departamento: req.params.id_departamento,
+          },
         },
         {
           path: "id_usuario",

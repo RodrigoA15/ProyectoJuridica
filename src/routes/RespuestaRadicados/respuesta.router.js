@@ -16,9 +16,8 @@ router.post("/create_respuestas", createRespuesta);
 router.get("/radicados_respuestas/:numero_radicado", respuestasporRadicado);
 //Listados de respuestas
 router.get(
-  "/respuestas_juridica",
+  "/respuestas_departamento/:id_departamento",
   authRequired,
-  isJuridica,
   respuestasJuridica
 );
 

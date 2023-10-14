@@ -33,6 +33,10 @@ router.delete(
 
 //Consultas usuarios por departamento
 
-router.get("/legal_user", authRequired, DepartamentoController.UserDepartament);
+router.get(
+  "/usuarios_departamento/:id_departamento",
+  authRequired,
+  DepartamentoController.UserDepartament
+);
 
 export default router;
