@@ -13,10 +13,13 @@ router.get("/respuestas", getAllRespuestas);
 router.post("/create_respuestas", createRespuesta);
 //ruta para guardar archivos pdf
 //
-router.get("/radicados_respuestas/:numero_radicado", respuestasporRadicado);
+router.get(
+  "/radicados_respuestas/:id_departamento/:numero_radicado",
+  respuestasporRadicado
+);
 //Listados de respuestas
 router.get(
-  "/respuestas_departamento/:id_departamento",
+  "/respuestas_departamento/:id_departamento/:numero_radicado",
   authRequired,
   respuestasJuridica
 );

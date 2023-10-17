@@ -102,12 +102,27 @@ export const respuestasporRadicado = async (req, res) => {
     const response = await Respuesta.find({})
       .populate({
         path: "id_asignacion",
-        populate: {
-          path: "id_radicado",
-          match: { numero_radicado: req.params.numero_radicado },
-        },
+
+        populate: [
+          {
+            path: "id_radicado",
+            match: {
+              id_departamento: req.params.id_departamento,
+              numero_radicado: req.params.numero_radicado,
+            },
+
+            populate: {
+              path: "id_asunto",
+              select: "nombre_asunto",
+            },
+          },
+          {
+            path: "id_usuario",
+            select: "username",
+          },
+        ],
       })
-      .exec();
+      .lean();
     const validacion = response.filter((respuesta) => {
       return respuesta.id_asignacion.id_radicado !== null;
     });
@@ -131,11 +146,19 @@ export const respuestasJuridica = async (req, res) => {
         populate: [
           {
             path: "id_radicado",
-            match: { id_departamento: req.params.id_departamento },
-            populate: {
-              path: "id_asunto",
-              select: "nombre_asunto",
+            match: {
+              id_departamento: req.params.id_departamento,
+              numero_radicado: req.params.numero_radicado,
             },
+            populate: [
+              {
+                path: "id_asunto",
+                select: "nombre_asunto",
+              },
+              {
+                path: "estado_radicado",
+              },
+            ],
           },
           {
             path: "id_usuario",
