@@ -1,7 +1,6 @@
 import Radicado from "../../models/radicados.js";
 import Entidad from "../../models/entidad.js";
 import Canal from "../../models/canal_entrada.js";
-import Departamento from "../../models/departamentos.js";
 
 export const getRadicados = async (req, res) => {
   try {
@@ -72,6 +71,7 @@ export const createRadicados = async (req, res) => {
       numero_radicado,
       fecha_radicado,
       cantidad_respuesta,
+      observaciones_radicado,
       id_procedencia,
       id_canal_entrada,
       id_asunto,
@@ -85,6 +85,7 @@ export const createRadicados = async (req, res) => {
       numero_radicado,
       fecha_radicado,
       cantidad_respuesta,
+      observaciones_radicado,
       id_procedencia,
       id_canal_entrada,
       id_asunto,

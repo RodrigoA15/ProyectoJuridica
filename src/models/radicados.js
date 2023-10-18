@@ -18,6 +18,10 @@ const RadicadoSchema = new mongoose.Schema(
       required: true,
     },
 
+    observaciones_radicado: {
+      type: String,
+    },
+
     //Relaciones>>>>
     id_procedencia: {
       type: mongoose.Schema.Types.ObjectId,
