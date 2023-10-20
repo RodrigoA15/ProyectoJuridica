@@ -44,12 +44,13 @@ router.get("/radicados_asignados", RadicadosController.allRadicadosAsignados);
 //AllRadicadoRespuestas
 router.get("/radicado_respuestas", RadicadosController.allRadicadosRespondidos);
 //Chart Entidad
-router.get("/chart_entidad", RadicadosController.queryChartEntidad);
 router.get("/chart_entidad2", RadicadosController.chartEntidad);
 //Chart Radicados
 router.get("/chart_radicados", RadicadosController.queryChartRadicados);
 //Chart Canal Entrada
 router.get("/chart_canal", RadicadosController.queryChartCanalEntrada);
+//Fecha radicados grafica
+router.get("/chart_fecha", RadicadosController.fechaGrafica);
 //Actualizacion departamento >>>
 router.put(
   "/reasignacion_departamento/:id_radicado",

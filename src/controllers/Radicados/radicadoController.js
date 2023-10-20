@@ -197,81 +197,52 @@ export const juridicaRadicado = async (req, res) => {
 };
 
 //Grafica entidad
-
-export const queryChartEntidad = async (req, res) => {
+export const chartEntidad = async (req, res) => {
   try {
     const entidad1 = await Entidad.findOne({ nombre_entidad: "Movit" });
+    const entidad2 = await Entidad.findOne({ nombre_entidad: "Secretaria" });
 
-    const countEntidad1 = await Radicado.aggregate([
+    const fecha = await Radicado.find().select("fecha_radicado");
+
+    const countEntidades = await Radicado.aggregate([
       {
         $match: {
-          id_entidad: entidad1._id,
-          fecha_radicado: { $gte: new Date("2023-09-06T00:00:00.000Z") },
+          $or: [{ id_entidad: entidad1._id }, { id_entidad: entidad2._id }],
+          fecha_radicado: { $gte: new Date(fecha), $lte: new Date() },
         },
       },
-
       {
         $group: {
           _id: {
             $dateToString: { format: "%Y-%m-%d", date: "$fecha_radicado" },
           },
-          Movit: { $sum: 1 },
+
+          Movit: {
+            $sum: {
+              $cond: [{ $eq: ["$id_entidad", entidad1._id] }, 1, 0],
+            },
+          },
+          
+          Secretaria: {
+            $sum: {
+              $cond: [{ $eq: ["$id_entidad", entidad2._id] }, 1, 0],
+            },
+          },
         },
       },
-
       {
         $sort: { _id: 1 },
       },
-
       {
         $project: {
           fecha_radicado: "$_id",
+          Secretaria: 1,
           Movit: 1,
           _id: 0,
         },
       },
     ]).exec();
-
-    res.status(200).json(countEntidad1);
-  } catch (error) {
-    res.status(500).json(`Error grafica entidad: ${error}`);
-  }
-};
-
-export const chartEntidad = async (req, res) => {
-  try {
-    const entidad2 = await Entidad.findOne({ nombre_entidad: "Secretaria" });
-    const countEntidad2 = await Radicado.aggregate([
-      {
-        $match: {
-          id_entidad: entidad2._id,
-          fecha_radicado: { $gte: new Date("2023-09-06T00:00:00.000Z") },
-        },
-      },
-
-      {
-        $group: {
-          _id: {
-            $dateToString: { format: "%Y-%m-%d", date: "$fecha_radicado" },
-          },
-          Secretaria: { $sum: 1 },
-        },
-      },
-
-      {
-        $sort: { _id: 1 },
-      },
-
-      {
-        $project: {
-          fecha_radicado: "$_id",
-          Secretaria: 1,
-          _id: 0,
-        },
-      },
-    ]).exec();
-
-    res.status(200).json(countEntidad2);
+    res.status(200).json(countEntidades);
   } catch (error) {
     console.log(error);
   }
@@ -281,13 +252,18 @@ export const chartEntidad = async (req, res) => {
 
 export const queryChartRadicados = async (req, res) => {
   try {
+    const fecha = await Radicado.find().select("fecha_radicado");
+
     const response = await Radicado.aggregate([
       {
         $match: {
-          estado_radicado: "Respuesta",
-          fecha_radicado: { $gte: new Date("2023-09-06T00:00:00.000Z") },
+          $and: [
+            { estado_radicado: "Respuesta" },
+            { fecha_radicado: { $gte: new Date(fecha), $lte: new Date() } },
+          ],
         },
       },
+
       {
         $group: {
           _id: {
@@ -382,5 +358,19 @@ export const updateDepartamento = async (req, res) => {
   } catch (error) {
     res.status(500).json(`error actualizacion departamento ${error}`);
     console.log(error);
+  }
+};
+
+export const fechaGrafica = async (req, res) => {
+  try {
+    const response = await Radicado.find().select("fecha_radicado");
+
+    if (response.length > 0) {
+      res.status(200).json(response);
+    } else {
+      res.status(404).json("NO se encontraron resultados en la busqueda");
+    }
+  } catch (error) {
+    res.status(500).json(`error fecha Grafica ${error}`);
   }
 };
