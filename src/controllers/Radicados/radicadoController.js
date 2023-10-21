@@ -222,7 +222,7 @@ export const chartEntidad = async (req, res) => {
               $cond: [{ $eq: ["$id_entidad", entidad1._id] }, 1, 0],
             },
           },
-          
+
           Secretaria: {
             $sum: {
               $cond: [{ $eq: ["$id_entidad", entidad2._id] }, 1, 0],
@@ -298,13 +298,25 @@ export const queryChartRadicados = async (req, res) => {
 
 export const queryChartCanalEntrada = async (req, res) => {
   try {
-    const canal = await Canal.findOne({ nombre_canal: "PRESENCIAL" });
+    const fecha = await Radicado.find().select("fecha_radicado");
+
+    const presencial = await Canal.findOne({ nombre_canal: "PRESENCIAL" });
+    const email = await Canal.findOne({ nombre_canal: "CORREO ELECTRONICO" });
+    const orfeo = await Canal.findOne({ nombre_canal: "ORFEO" });
+    const emailCertificado = await Canal.findOne({
+      nombre_canal: "CORREO CERTIFICADO",
+    });
 
     const countCanal = await Radicado.aggregate([
       {
         $match: {
-          id_canal_entrada: canal._id,
-          fecha_radicado: { $gte: new Date("2023-09-06T00:00:00.000Z") },
+          $or: [
+            { id_canal_entrada: presencial._id },
+            { id_canal_entrada: email._id },
+            { id_canal_entrada: orfeo._id },
+            { id_canal_entrada: emailCertificado._id },
+          ],
+          fecha_radicado: { $gte: new Date(fecha), $lte: new Date() },
         },
       },
 
@@ -313,7 +325,33 @@ export const queryChartCanalEntrada = async (req, res) => {
           _id: {
             $dateToString: { format: "%Y-%m-%d", date: "$fecha_radicado" },
           },
-          Canal: { $sum: 1 },
+          Presencial: {
+            $sum: {
+              $cond: [{ $eq: ["$id_canal_entrada", presencial._id] }, 1, 0],
+            },
+          },
+
+          Correo: {
+            $sum: {
+              $cond: [{ $eq: ["$id_canal_entrada", email._id] }, 1, 0],
+            },
+          },
+
+          Orfeo: {
+            $sum: {
+              $cond: [{ $eq: ["$id_canal_entrada", orfeo._id] }, 1, 0],
+            },
+          },
+
+          CorreoCertificado: {
+            $sum: {
+              $cond: [
+                { $eq: ["$id_canal_entrada", emailCertificado._id] },
+                1,
+                0,
+              ],
+            },
+          },
         },
       },
 
@@ -324,7 +362,10 @@ export const queryChartCanalEntrada = async (req, res) => {
       {
         $project: {
           fecha_radicado: "$_id",
-          Canal: 1,
+          Presencial: 1,
+          Correo: 1,
+          Orfeo: 1,
+          CorreoCertificado: 1,
           _id: 0,
         },
       },
