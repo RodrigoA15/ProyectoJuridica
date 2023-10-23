@@ -415,3 +415,4 @@ export const fechaGrafica = async (req, res) => {
     res.status(500).json(`error fecha Grafica ${error}`);
   }
 };
+

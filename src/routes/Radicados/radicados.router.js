@@ -3,7 +3,7 @@ import * as RadicadosController from "../../controllers/Radicados/radicadoContro
 import { authRequired } from "../../middlewares/validateToken.js";
 // import { validateSchema } from "../../middlewares/validator.js";
 // import { radicadoSchema } from "../../schemas/radicadosSchema.js";
-
+import * as ExcelRadicados from "../../controllers/Radicados/QuerysExcel.js";
 const router = Router();
 
 //Radicados>>>>>>>
@@ -56,5 +56,11 @@ router.put(
   "/reasignacion_departamento/:id_radicado",
   RadicadosController.updateDepartamento
 );
+
+////////////////////////////////////////////Querys Excel/////////////////////////////////
+router.get("/radicadoxlsx", ExcelRadicados.allRadicados);
+router.get("/radicadop", ExcelRadicados.pruebaApi);
+
+// router.get("/descargarData", ExcelRadicados.dtaexcel);
 
 export default router;

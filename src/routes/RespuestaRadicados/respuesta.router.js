@@ -4,6 +4,7 @@ import {
   createRespuesta,
   respuestasporRadicado,
   respuestasJuridica,
+  answersByUser,
 } from "../../controllers/RespuestaRadicados/respuestaController.js";
 import { authRequired, isJuridica } from "../../middlewares/validateToken.js";
 
@@ -23,5 +24,8 @@ router.get(
   authRequired,
   respuestasJuridica
 );
+
+//Respuestas por usuario>>>>>>
+router.get("/answeruser", answersByUser);
 
 export default router;
