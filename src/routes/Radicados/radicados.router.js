@@ -49,14 +49,16 @@ router.get("/chart_entidad2", RadicadosController.chartEntidad);
 router.get("/chart_radicados", RadicadosController.queryChartRadicados);
 //Chart Canal Entrada
 router.get("/chart_canal", RadicadosController.queryChartCanalEntrada);
-//Fecha radicados grafica
-router.get("/chart_fecha", RadicadosController.fechaGrafica);
 //Actualizacion departamento >>>
 router.put(
   "/reasignacion_departamento/:id_radicado",
   RadicadosController.updateDepartamento
 );
-
+//Grafica Radicados Departamento
+router.get(
+  "/chartdepartamentos",
+  RadicadosController.chartDepartamentoRadicados
+);
 ////////////////////////////////////////////Querys Excel/////////////////////////////////
 router.get("/radicadoxlsx", ExcelRadicados.allRadicados);
 router.get("/radicadop", ExcelRadicados.pruebaApi);

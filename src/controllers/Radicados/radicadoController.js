@@ -1,6 +1,7 @@
 import Radicado from "../../models/radicados.js";
 import Entidad from "../../models/entidad.js";
 import Canal from "../../models/canal_entrada.js";
+import Departamento from "../../models/departamentos.js";
 
 export const getRadicados = async (req, res) => {
   try {
@@ -184,7 +185,7 @@ export const juridicaRadicado = async (req, res) => {
     const response = await Radicado.find({
       id_departamento: { $eq: req.params.id_departamento },
       estado_radicado: "Pendiente",
-    }).populate("id_departamento id_asunto");
+    }).populate("id_departamento id_asunto id_procedencia");
 
     if (!response.length > 0)
       return res
@@ -249,7 +250,6 @@ export const chartEntidad = async (req, res) => {
 };
 
 //Grafica Radicados
-
 export const queryChartRadicados = async (req, res) => {
   try {
     const fecha = await Radicado.find().select("fecha_radicado");
@@ -402,17 +402,91 @@ export const updateDepartamento = async (req, res) => {
   }
 };
 
-export const fechaGrafica = async (req, res) => {
-  try {
-    const response = await Radicado.find().select("fecha_radicado");
+//Grafica Radicados por departamento
 
-    if (response.length > 0) {
-      res.status(200).json(response);
-    } else {
-      res.status(404).json("NO se encontraron resultados en la busqueda");
-    }
+export const chartDepartamentoRadicados = async (req, res) => {
+  try {
+    const fecha = await Radicado.find().select("fecha_radicado");
+    const juridica = await Departamento.findOne({
+      nombre_departamento: "Juridica",
+    });
+    const rmi = await Departamento.findOne({
+      nombre_departamento: "RMI",
+    });
+
+    const front = await Departamento.findOne({
+      nombre_departamento: "FRONT_OFFICE",
+    });
+
+    const sistemas = await Departamento.findOne({
+      nombre_departamento: "Sistemas",
+    });
+
+    console.log(juridica);
+
+    const countDepartamentos = await Radicado.aggregate([
+      {
+        $match: {
+          $or: [
+            { id_departamento: juridica._id },
+            { id_departamento: rmi._id },
+            { id_departamento: front._id },
+            { id_departamento: sistemas._id },
+          ],
+          fecha_radicado: { $gte: new Date(fecha), $lte: new Date() },
+        },
+      },
+
+      {
+        $group: {
+          _id: {
+            $dateToString: { format: "%Y-%m-%d", date: "$fecha_radicado" },
+          },
+
+          JURIDICA: {
+            $sum: {
+              $cond: [{ $eq: ["$id_departamento", juridica._id] }, 1, 0],
+            },
+          },
+
+          RMI: {
+            $sum: {
+              $cond: [{ $eq: ["$id_departamento", rmi._id] }, 1, 0],
+            },
+          },
+
+          FRONT_OFFICE: {
+            $sum: {
+              $cond: [{ $eq: ["$id_departamento", front._id] }, 1, 0],
+            },
+          },
+          SISTEMAS: {
+            $sum: {
+              $cond: [{ $eq: ["$id_departamento", sistemas._id] }, 1, 0],
+            },
+          },
+        },
+      },
+
+      {
+        $sort: { _id: 1 },
+      },
+
+      {
+        $project: {
+          fecha_radicado: "$_id",
+          JURIDICA: 1,
+          RMI: 1,
+          FRONT_OFFICE: 1,
+          SISTEMAS: 1,
+          _id: 0,
+        },
+      },
+    ]);
+    res.status(200).json(countDepartamentos);
+    console.log(countDepartamentos);
   } catch (error) {
-    res.status(500).json(`error fecha Grafica ${error}`);
+    res.status(500).json(`error grafica Radicados Departamento ${error}`);
+    console.log(error);
   }
 };
-
