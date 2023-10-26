@@ -252,14 +252,19 @@ export const chartEntidad = async (req, res) => {
 //Grafica Radicados
 export const queryChartRadicados = async (req, res) => {
   try {
-    const fecha = await Radicado.find().select("fecha_radicado");
-
+    const fechaInicio = req.params.fecha_inicio;
+    const fechaFin = req.params.fecha_fin;
     const response = await Radicado.aggregate([
       {
         $match: {
           $and: [
             { estado_radicado: "Respuesta" },
-            { fecha_radicado: { $gte: new Date(fecha), $lte: new Date() } },
+            {
+              fecha_radicado: {
+                $gte: new Date(fechaInicio),
+                $lte: new Date(fechaFin),
+              },
+            },
           ],
         },
       },
@@ -406,7 +411,9 @@ export const updateDepartamento = async (req, res) => {
 
 export const chartDepartamentoRadicados = async (req, res) => {
   try {
-    const fecha = await Radicado.find().select("fecha_radicado");
+    const fechaInicio = req.params.fecha_inicio;
+    const fechaFin = req.params.fecha_fin;
+
     const juridica = await Departamento.findOne({
       nombre_departamento: "Juridica",
     });
@@ -433,7 +440,10 @@ export const chartDepartamentoRadicados = async (req, res) => {
             { id_departamento: front._id },
             { id_departamento: sistemas._id },
           ],
-          fecha_radicado: { $gte: new Date(fecha), $lte: new Date() },
+          fecha_radicado: {
+            $gte: new Date(fechaInicio),
+            $lte: new Date(fechaFin),
+          },
         },
       },
 
