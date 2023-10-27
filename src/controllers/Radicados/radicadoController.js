@@ -34,11 +34,12 @@ export const allRadicadosPendientes = async (req, res) => {
   }
 };
 
+//Radicados Asignados
 export const allRadicadosAsignados = async (req, res) => {
   try {
     const response = await Radicado.find({
       estado_radicado: { $eq: "Asignados" },
-    });
+    })
 
     if (response.length > 0) {
       res.status(200).json(response);
@@ -197,19 +198,46 @@ export const juridicaRadicado = async (req, res) => {
   }
 };
 
+//Actualizacion de departamentos  (reasignacion de radicado)>>>
+export const updateDepartamento = async (req, res) => {
+  try {
+    const { id_departamento } = req.body;
+    const response = await Radicado.findByIdAndUpdate(
+      req.params.id_radicado,
+      {
+        id_departamento,
+      },
+      { new: true }
+    );
+
+    if (response) {
+      res.status(200).json("Reasignado Correctamente");
+    } else {
+      res.status(400).json("No se pudo Reasignar");
+    }
+  } catch (error) {
+    res.status(500).json(`error actualizacion departamento ${error}`);
+    console.log(error);
+  }
+};
+
 //Grafica entidad
 export const chartEntidad = async (req, res) => {
   try {
     const entidad1 = await Entidad.findOne({ nombre_entidad: "Movit" });
     const entidad2 = await Entidad.findOne({ nombre_entidad: "Secretaria" });
 
-    const fecha = await Radicado.find().select("fecha_radicado");
+    const fechaInicio = req.params.fechainicio;
+    const fechaFin = req.params.fechafin;
 
     const countEntidades = await Radicado.aggregate([
       {
         $match: {
           $or: [{ id_entidad: entidad1._id }, { id_entidad: entidad2._id }],
-          fecha_radicado: { $gte: new Date(fecha), $lte: new Date() },
+          fecha_radicado: {
+            $gte: new Date(fechaInicio),
+            $lte: new Date(fechaFin),
+          },
         },
       },
       {
@@ -303,14 +331,15 @@ export const queryChartRadicados = async (req, res) => {
 
 export const queryChartCanalEntrada = async (req, res) => {
   try {
-    const fecha = await Radicado.find().select("fecha_radicado");
-
     const presencial = await Canal.findOne({ nombre_canal: "PRESENCIAL" });
     const email = await Canal.findOne({ nombre_canal: "CORREO ELECTRONICO" });
     const orfeo = await Canal.findOne({ nombre_canal: "ORFEO" });
     const emailCertificado = await Canal.findOne({
       nombre_canal: "CORREO CERTIFICADO",
     });
+
+    const fechaInicio = req.params.fechainicio;
+    const fechaFin = req.params.fechafin;
 
     const countCanal = await Radicado.aggregate([
       {
@@ -321,7 +350,10 @@ export const queryChartCanalEntrada = async (req, res) => {
             { id_canal_entrada: orfeo._id },
             { id_canal_entrada: emailCertificado._id },
           ],
-          fecha_radicado: { $gte: new Date(fecha), $lte: new Date() },
+          fecha_radicado: {
+            $gte: new Date(fechaInicio),
+            $lte: new Date(fechaFin),
+          },
         },
       },
 
@@ -379,30 +411,6 @@ export const queryChartCanalEntrada = async (req, res) => {
     res.status(200).json(countCanal);
   } catch (error) {
     res.status(500).json(`error grafica Canal Entrada ${error}`);
-    console.log(error);
-  }
-};
-
-//Actualizacion de departamentos  (reasignacion de radicado)>>>
-
-export const updateDepartamento = async (req, res) => {
-  try {
-    const { id_departamento } = req.body;
-    const response = await Radicado.findByIdAndUpdate(
-      req.params.id_radicado,
-      {
-        id_departamento,
-      },
-      { new: true }
-    );
-
-    if (response) {
-      res.status(200).json("Reasignado Correctamente");
-    } else {
-      res.status(400).json("No se pudo Reasignar");
-    }
-  } catch (error) {
-    res.status(500).json(`error actualizacion departamento ${error}`);
     console.log(error);
   }
 };

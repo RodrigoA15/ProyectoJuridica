@@ -5,6 +5,8 @@ const { Workbook } = pkg;
 const NOMBRE_ARCHIVO = "Radicados";
 const RUTA = "../files/radicados.xlsx";
 
+//Not used>>>
+// Json to react was used instead
 export const allRadicados = async (req, res) => {
   try {
     const radicados = await Radicados.find().populate([

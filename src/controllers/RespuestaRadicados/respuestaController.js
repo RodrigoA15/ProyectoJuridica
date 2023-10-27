@@ -122,6 +122,7 @@ export const respuestasporRadicado = async (req, res) => {
         ],
       })
       .lean();
+    console.log(response);
     const validacion = response.filter((respuesta) => {
       return respuesta.id_asignacion.id_radicado !== null;
     });

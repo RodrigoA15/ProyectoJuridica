@@ -44,11 +44,20 @@ router.get("/radicados_asignados", RadicadosController.allRadicadosAsignados);
 //AllRadicadoRespuestas
 router.get("/radicado_respuestas", RadicadosController.allRadicadosRespondidos);
 //Chart Entidad
-router.get("/chart_entidad2", RadicadosController.chartEntidad);
+router.get(
+  "/chart_entidad2/:fechainicio/:fechafin",
+  RadicadosController.chartEntidad
+);
 //Chart Radicados
-router.get("/chart_radicados/:fecha_inicio/:fecha_fin", RadicadosController.queryChartRadicados);
+router.get(
+  "/chart_radicados/:fecha_inicio/:fecha_fin",
+  RadicadosController.queryChartRadicados
+);
 //Chart Canal Entrada
-router.get("/chart_canal", RadicadosController.queryChartCanalEntrada);
+router.get(
+  "/chart_canal/:fechainicio/:fechafin",
+  RadicadosController.queryChartCanalEntrada
+);
 //Actualizacion departamento >>>
 router.put(
   "/reasignacion_departamento/:id_radicado",
