@@ -74,4 +74,6 @@ router.get("/radicadop", ExcelRadicados.pruebaApi);
 
 // router.get("/descargarData", ExcelRadicados.dtaexcel);
 
+router.post("/data", RadicadosController.dataFake);
+
 export default router;

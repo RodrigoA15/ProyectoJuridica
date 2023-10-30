@@ -39,7 +39,7 @@ export const allRadicadosAsignados = async (req, res) => {
   try {
     const response = await Radicado.find({
       estado_radicado: { $eq: "Asignados" },
-    })
+    });
 
     if (response.length > 0) {
       res.status(200).json(response);
@@ -505,6 +505,34 @@ export const chartDepartamentoRadicados = async (req, res) => {
     console.log(countDepartamentos);
   } catch (error) {
     res.status(500).json(`error grafica Radicados Departamento ${error}`);
+    console.log(error);
+  }
+};
+
+export const dataFake = async (req, res) => {
+  try {
+    const cantidadRegistros = 1110;
+
+    for (let i = 811; i <= cantidadRegistros; i++) {
+      const nuevoRadicado = new Radicado({
+        numero_radicado: String(i),
+        fecha_radicado: new Date("2023-10-24T00:00:00.000Z"),
+        cantidad_respuesta: 1,
+        id_procedencia: "64f73d985407dc4b3ee76b62",
+        id_canal_entrada: "651b127503fd9c4566d649c6",
+        id_asunto: "652968be7bec4554a3ce92d1",
+        id_tipificacion: "64f73e065407dc4b3ee76b70",
+        id_entidad: "64f73e365407dc4b3ee76b74",
+        id_departamento: "652802b82f135cffc71c0100",
+        estado_radicado: "Respuesta",
+        createdAt: new Date("2023-10-18T13:07:12.017Z"),
+        updatedAt: new Date("2023-10-20T15:30:18.055Z"),
+      });
+      const save = await nuevoRadicado.save();
+      console.log(save);
+    }
+  } catch (error) {
+    res.status(500).json("error seeders");
     console.log(error);
   }
 };
