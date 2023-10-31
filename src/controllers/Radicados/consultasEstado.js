@@ -5,9 +5,11 @@ export const getAllPreAsignaciones = async (req, res) => {
     const response = await Radicados.find({
       id_departamento: { $eq: req.params.id_departamento },
       estado_radicado: { $eq: "Pre-asignacion" },
-    }).populate(
-      "id_procedencia numero_radicado id_canal_entrada id_asunto id_tipificacion id_entidad id_departamento"
-    );
+    })
+      .populate(
+        "id_procedencia numero_radicado id_canal_entrada id_asunto id_tipificacion id_entidad id_departamento"
+      )
+      .lean();
 
     if (response.length > 0) {
       res.status(200).json(response);

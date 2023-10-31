@@ -5,9 +5,11 @@ import Departamento from "../../models/departamentos.js";
 
 export const getRadicados = async (req, res) => {
   try {
-    const radicados = await Radicado.find().populate(
-      "id_procedencia numero_radicado id_canal_entrada id_asunto id_tipificacion id_entidad id_departamento"
-    );
+    const radicados = await Radicado.find()
+      .populate(
+        "id_procedencia numero_radicado id_canal_entrada id_asunto id_tipificacion id_entidad id_departamento"
+      )
+      .lean();
     if (radicados.length > 0) {
       res.status(200).json(radicados);
     } else {
@@ -23,7 +25,8 @@ export const allRadicadosPendientes = async (req, res) => {
   try {
     const response = await Radicado.find({
       estado_radicado: { $eq: "Pendiente" },
-    });
+    }).lean();
+
     if (response.length > 0) {
       res.status(200).json(response);
     } else {
@@ -39,7 +42,7 @@ export const allRadicadosAsignados = async (req, res) => {
   try {
     const response = await Radicado.find({
       estado_radicado: { $eq: "Asignados" },
-    });
+    }).lean();
 
     if (response.length > 0) {
       res.status(200).json(response);
@@ -55,7 +58,7 @@ export const allRadicadosRespondidos = async (req, res) => {
   try {
     const response = await Radicado.find({
       estado_radicado: { $eq: "Respuesta" },
-    });
+    }).lean();
 
     if (response.length > 0) {
       res.status(200).json(response);
@@ -109,9 +112,11 @@ export const createRadicados = async (req, res) => {
 
 export const getByIdRadicados = async (req, res) => {
   try {
-    const radicado = await Radicado.findById(req.params.id_radicado).populate(
-      "id_procedencia numero_radicado id_canal_entrada id_asunto id_tipificacion id_entidad id_usuario"
-    );
+    const radicado = await Radicado.findById(req.params.id_radicado)
+      .populate(
+        "id_procedencia numero_radicado id_canal_entrada id_asunto id_tipificacion id_entidad id_usuario"
+      )
+      .lean();
 
     if (!radicado) return res.status(404).json("No se encontro el radicado");
     return res.status(200).json(radicado);
@@ -168,7 +173,9 @@ export const departamentoRadicado = async (req, res) => {
     const response = await Radicado.find({
       id_departamento: "64f75b9e404987956278a7a1",
       estado_radicado: "Pendiente",
-    }).populate("id_departamento id_asunto");
+    })
+      .populate("id_departamento id_asunto")
+      .lean();
 
     if (!response.length > 0)
       return res
@@ -186,7 +193,9 @@ export const juridicaRadicado = async (req, res) => {
     const response = await Radicado.find({
       id_departamento: { $eq: req.params.id_departamento },
       estado_radicado: "Pendiente",
-    }).populate("id_departamento id_asunto id_procedencia");
+    })
+      .populate("id_departamento id_asunto id_procedencia")
+      .lean();
 
     if (!response.length > 0)
       return res
@@ -315,7 +324,7 @@ export const queryChartRadicados = async (req, res) => {
           _id: 0,
         },
       },
-    ]);
+    ]).exec();
 
     if (response.length > 0) {
       res.status(200).json(response);
@@ -502,7 +511,6 @@ export const chartDepartamentoRadicados = async (req, res) => {
       },
     ]);
     res.status(200).json(countDepartamentos);
-    console.log(countDepartamentos);
   } catch (error) {
     res.status(500).json(`error grafica Radicados Departamento ${error}`);
     console.log(error);
@@ -511,19 +519,19 @@ export const chartDepartamentoRadicados = async (req, res) => {
 
 export const dataFake = async (req, res) => {
   try {
-    const cantidadRegistros = 1110;
+    const cantidadRegistros = 10000;
 
-    for (let i = 811; i <= cantidadRegistros; i++) {
+    for (let i = 7001; i <= cantidadRegistros; i++) {
       const nuevoRadicado = new Radicado({
         numero_radicado: String(i),
-        fecha_radicado: new Date("2023-10-24T00:00:00.000Z"),
+        fecha_radicado: new Date("2023-10-29T00:00:00.000Z"),
         cantidad_respuesta: 1,
         id_procedencia: "64f73d985407dc4b3ee76b62",
-        id_canal_entrada: "651b127503fd9c4566d649c6",
+        id_canal_entrada: "651b129303fd9c4566d649ca",
         id_asunto: "652968be7bec4554a3ce92d1",
         id_tipificacion: "64f73e065407dc4b3ee76b70",
-        id_entidad: "64f73e365407dc4b3ee76b74",
-        id_departamento: "652802b82f135cffc71c0100",
+        id_entidad: "6516cfce94b2443346afb3d2",
+        id_departamento: "652805c6cc9a173e1f96ab52",
         estado_radicado: "Respuesta",
         createdAt: new Date("2023-10-18T13:07:12.017Z"),
         updatedAt: new Date("2023-10-20T15:30:18.055Z"),
@@ -531,6 +539,7 @@ export const dataFake = async (req, res) => {
       const save = await nuevoRadicado.save();
       console.log(save);
     }
+    res.status(200).json("creado");
   } catch (error) {
     res.status(500).json("error seeders");
     console.log(error);
