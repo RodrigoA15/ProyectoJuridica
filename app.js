@@ -13,6 +13,7 @@ import routeTipificacion from "./src/routes/Tipificacion/tipificacion.router.js"
 import routeEstado from "./src/routes/EstadoRadicados/estadoRdos.router.js";
 import routeAsiganacion from "./src/routes/Asignaciones/asignar.router.js";
 import routerRespuesta from "./src/routes/RespuestaRadicados/respuesta.router.js";
+import routerHistorial from "./src/routes/Historial/Historial.router.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 
@@ -40,5 +41,6 @@ app.use(`${ruta}/tipificacion`, routeTipificacion);
 app.use(`${ruta}`, routeEstado);
 app.use(`${ruta}`, routeAsiganacion);
 app.use(`${ruta}`, routerRespuesta);
+app.use(`${ruta}`, routerHistorial);
 
 export default app;

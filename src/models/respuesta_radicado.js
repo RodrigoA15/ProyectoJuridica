@@ -16,6 +16,11 @@ const RespuestaRadicado = new mongoose.Schema({
     type: String,
     required: true,
   },
+
+  fechaRespuesta: {
+    type: Date,
+    required: true,
+  },
 });
 
 export default mongoose.model("RadicadoRespuestas", RespuestaRadicado);

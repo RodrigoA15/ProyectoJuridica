@@ -74,12 +74,14 @@ export const createRespuesta = async (req, res) => {
       }
 
       urlArchivos = path.join(pathPdf, nombreArchivo);
-      const { id_asignacion, numero_radicado_respuesta } = req.body;
+      const { id_asignacion, numero_radicado_respuesta, fechaRespuesta } =
+        req.body;
 
       const newRespuesta = new Respuesta({
         id_asignacion,
         numero_radicado_respuesta,
         urlArchivo: urlArchivos,
+        fechaRespuesta: fechaRespuesta,
       });
 
       const savedRespuesta = await newRespuesta.save();
@@ -231,5 +233,49 @@ export const answersByUser = async (req, res) => {
     res.status(200).json(respuestas);
   } catch (error) {
     res.status(500).json(`error respuestas por usuarios ${error}`);
+  }
+};
+
+export const respuestasporRadicadoExcel = async (req, res) => {
+  try {
+    const response = await Respuesta.find({})
+      .populate({
+        path: "id_asignacion",
+
+        populate: [
+          {
+            path: "id_radicado",
+
+            populate: [
+              { path: "id_procedencia", select: "nombre -_id" },
+              { path: "id_canal_entrada", select: "nombre_canal -_id" },
+              { path: "id_asunto", select: "nombre_asunto -_id" },
+              { path: "id_tipificacion", select: "nombre_tipificacion -_id" },
+              { path: "id_entidad", select: "nombre_entidad -_id" },
+              {
+                path: "id_departamento",
+                select: "nombre_departamento -_id",
+              },
+            ],
+          },
+          {
+            path: "id_usuario",
+            select: "username",
+          },
+        ],
+      })
+      .lean();
+    const validacion = response.filter((respuesta) => {
+      return respuesta.id_asignacion.id_radicado !== null;
+    });
+
+    if (validacion.length > 0) {
+      res.status(200).json(validacion);
+    } else {
+      res.status(404).json("No se encontraron asignaciones pendientes");
+    }
+  } catch (error) {
+    res.status(500).json(`error respuestas por radicado ${error}`);
+    console.log(error);
   }
 };
