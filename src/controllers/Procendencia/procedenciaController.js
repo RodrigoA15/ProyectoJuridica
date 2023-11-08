@@ -34,14 +34,20 @@ export const createProcedencia = async (req, res) => {
       info_contacto,
     });
 
-    const saveProcedencia = await newProcedencia.save();
+    const numero = await Procedencia.findOne({ numero_identificacion });
 
-    if (saveProcedencia) {
-      res.status(200).json("Procedencia Creada Correctamente");
-      console.log("Procedencia Creada Correctamente");
+    if (!numero) {
+      const saveProcedencia = await newProcedencia.save();
+
+      if (saveProcedencia) {
+        res.status(200).json("Procedencia Creada Correctamente");
+        console.log("Procedencia Creada Correctamente");
+      } else {
+        res.json("NO se pudo crear la procedencia");
+        console.log("Ploaca");
+      }
     } else {
-      res.json("NO se pudo crear la procedencia");
-      console.log("Ploaca");
+      res.status(500).json("Usuario ya registrado");
     }
   } catch (error) {
     res.status(500).json(error);
