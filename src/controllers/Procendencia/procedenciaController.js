@@ -23,7 +23,9 @@ export const createProcedencia = async (req, res) => {
       numero_identificacion,
       tipo_identificacion,
       tipo_contacto,
-      info_contacto,
+      correo,
+      telefono,
+      direccion,
     } = req.body;
     const newProcedencia = new Procedencia({
       nombre,
@@ -31,7 +33,9 @@ export const createProcedencia = async (req, res) => {
       numero_identificacion,
       tipo_identificacion,
       tipo_contacto,
-      info_contacto,
+      correo,
+      telefono,
+      direccion,
     });
 
     const numero = await Procedencia.findOne({ numero_identificacion });

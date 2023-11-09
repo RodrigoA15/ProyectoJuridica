@@ -30,10 +30,19 @@ const ProcedenciaSchema = new mongoose.Schema(
       enum: ["direccion", "telefono", "correo"],
     },
 
-    info_contacto: {
+    correo: {
       type: String,
-      required: true,
     },
+
+    telefono:{
+      type: Number
+    },
+
+    direccion: {
+      type: String
+    }
+
+
   },
   {
     timestamps: true,

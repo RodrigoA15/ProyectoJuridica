@@ -8,7 +8,7 @@ const router = Router();
 router.get("/procedencia", ProcendenciaController.getProcedencia);
 router.post("/procedencia", ProcendenciaController.createProcedencia);
 router.get(
-  "/procedencia/:numero_identificacion",
+  "/procedencias/:numero_identificacion",
   ProcendenciaController.getProcedenciaById
 );
 
