@@ -17,15 +17,16 @@ export const getDepartamento = async (req, res) => {
 
 export const createDepartamento = async (req, res) => {
   try {
-    const { nombre_departamento } = req.body;
+    const { nombre_departamento, id_entidad } = req.body;
     const newDepartamento = new Departamento({
       nombre_departamento,
+      id_entidad,
     });
 
     await newDepartamento.save();
     res.status(200).json(newDepartamento);
   } catch (error) {
-    res.status(500).json("Error al crear departamento", error);
+    res.status(500).json(`Error al crear departamento  ${error}`);
   }
 };
 
@@ -97,5 +98,22 @@ export const UserDepartament = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).json(error);
+  }
+};
+
+export const getEntidadByDepartamento = async (req, res) => {
+  try {
+    const response = await Departamento.find({
+      id_entidad: { $eq: req.params.id_entidad },
+    });
+    console.log(response);
+
+    if (response.length > 0) {
+      res.status(200).json(response);
+    } else {
+      res.status(404).json("No se encontraron resultados en la busqueda");
+    }
+  } catch (error) {
+    res.status(500).json(`error asuntos Departamento ${error}`);
   }
 };

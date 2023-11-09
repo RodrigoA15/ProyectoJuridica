@@ -75,3 +75,5 @@ export const deleteEntidad = async (req, res) => {
     res.status(500).json(`Error de servidor: ${error}`);
   }
 };
+
+

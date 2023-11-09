@@ -7,7 +7,14 @@ const DepartamentosSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
+
+    id_entidad: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Entidad",
+      required: true,
+    },
   },
+
   {
     timestamps: true,
   }

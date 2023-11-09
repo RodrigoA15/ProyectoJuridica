@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+
 const AsuntoSchema = new mongoose.Schema(
   {
     nombre_asunto: {

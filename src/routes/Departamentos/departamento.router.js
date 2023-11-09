@@ -39,4 +39,8 @@ router.get(
   DepartamentoController.UserDepartament
 );
 
+router.get(
+  "/dptoentidad/:id_entidad",
+  DepartamentoController.getEntidadByDepartamento
+);
 export default router;

@@ -23,4 +23,6 @@ router.delete(
   EntidadController.deleteEntidad
 );
 
+
+
 export default router;
