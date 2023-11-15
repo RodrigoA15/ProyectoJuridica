@@ -20,9 +20,9 @@ import cors from "cors";
 const ruta = "/api";
 const app = express();
 const corsOptions = {
-  origin: 'http://192.168.28.74:3000',
-  credentials: true
-}
+  origin: "http://192.168.28.74:3000",
+  credentials: true,
+};
 app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(morgan("dev"));

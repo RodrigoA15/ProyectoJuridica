@@ -1,6 +1,6 @@
 import Respuesta from "../../models/respuesta_radicado.js";
 import multer from "multer";
-import path from "path";
+import path from "node:path";
 import SambaClient from "samba-client";
 import Radicados from "../../models/radicados.js";
 
@@ -185,57 +185,58 @@ export const respuestasJuridica = async (req, res) => {
 };
 
 //Usuarios con mas repuestas
+//Not USED >>>>>>>
+// export const answersByUser = async (req, res) => {
+//   try {
+//     const fecha = Radicados.find().select("fecha_radicado");
 
-export const answersByUser = async (req, res) => {
-  try {
-    const fecha = Radicados.find().select("fecha_radicado");
+//     // const respuestas = await Respuesta.aggregate([
+//     //   {
+//     //     $match: {
+//     //       $or: [
+//     //         { id_asignacion: "652fd8bfa7d837a7d83ca584" },
+//     //         // { numero_radicado_respuesta: 23 },
+//     //       ],
+//     //     },
+//     //   },
+//     // ]);
 
-    // const respuestas = await Respuesta.aggregate([
-    //   {
-    //     $match: {
-    //       $or: [
-    //         { id_asignacion: "652fd8bfa7d837a7d83ca584" },
-    //         // { numero_radicado_respuesta: 23 },
-    //       ],
-    //     },
-    //   },
-    // ]);
+//     const respuestas = await Respuesta.aggregate([
+//       {
+//         $group: {
+//           _id: "$_id",
+//           times: { $sum: "$times_count" },
+//           asignacion: { $first: "$id_asignacion" },
+//         },
+//       },
 
-    const respuestas = await Respuesta.aggregate([
-      {
-        $group: {
-          _id: "$_id",
-          times: { $sum: "$times_count" },
-          asignacion: { $first: "$id_asignacion" },
-        },
-      },
+//       {
+//         $limit: 5,
+//       },
 
-      {
-        $limit: 5,
-      },
+//       {
+//         $lookup: {
+//           from: "Asignaciones",
+//           localField: "id_asignacion",
+//           foreignField: "id_asignacion",
+//           as: "Asignaicon",
+//         },
+//       },
 
-      {
-        $lookup: {
-          from: "Asignaciones",
-          localField: "id_asignacion",
-          foreignField: "id_asignacion",
-          as: "Asignaicon",
-        },
-      },
+//       {
+//         $unwind: "$asignacion",
+//       },
+//     ]);
 
-      {
-        $unwind: "$asignacion",
-      },
-    ]);
+//     // const respuestas = await Respuesta.find();
 
-    // const respuestas = await Respuesta.find();
+//     res.status(200).json(respuestas);
+//   } catch (error) {
+//     res.status(500).json(`error respuestas por usuarios ${error}`);
+//   }
+// };
 
-    res.status(200).json(respuestas);
-  } catch (error) {
-    res.status(500).json(`error respuestas por usuarios ${error}`);
-  }
-};
-
+//Reporte de excel radicados con sus respuestas
 export const respuestasporRadicadoExcel = async (req, res) => {
   try {
     const response = await Respuesta.find({})
@@ -245,7 +246,6 @@ export const respuestasporRadicadoExcel = async (req, res) => {
         populate: [
           {
             path: "id_radicado",
-
             populate: [
               { path: "id_procedencia", select: "nombre -_id" },
               { path: "id_canal_entrada", select: "nombre_canal -_id" },

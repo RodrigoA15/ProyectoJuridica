@@ -10,6 +10,6 @@ _app.default.listen(PORT, HOST, error => {
   if (error) {
     console.log(`error server: ${error}`);
   } else {
-    console.log(`Server listening on ${PORT}, ${HOST}`);
+    console.log(`Server listening on ${PORT}`);
   }
 });

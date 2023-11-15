@@ -69,8 +69,8 @@ router.get(
   RadicadosController.chartDepartamentoRadicados
 );
 ////////////////////////////////////////////Querys Excel/////////////////////////////////
-router.get("/radicadoxlsx", ExcelRadicados.allRadicados);
-router.get("/radicadop", ExcelRadicados.pruebaApi);
+// router.get("/radicadoxlsx", ExcelRadicados.allRadicados);
+router.get("/radicadop", ExcelRadicados.allRadicadosExcel);
 
 // router.get("/descargarData", ExcelRadicados.dtaexcel);
 

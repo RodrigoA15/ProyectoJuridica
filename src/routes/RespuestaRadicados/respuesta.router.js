@@ -4,7 +4,7 @@ import {
   createRespuesta,
   respuestasporRadicado,
   respuestasJuridica,
-  answersByUser,
+  // answersByUser,
   respuestasporRadicadoExcel,
 } from "../../controllers/RespuestaRadicados/respuestaController.js";
 import { authRequired, isJuridica } from "../../middlewares/validateToken.js";
@@ -28,6 +28,6 @@ router.get(
 
 router.get("/radicados_respuestas_excel", respuestasporRadicadoExcel);
 //Respuestas por usuario>>>>>>
-router.get("/answeruser", answersByUser);
+// router.get("/answeruser", answersByUser);
 
 export default router;

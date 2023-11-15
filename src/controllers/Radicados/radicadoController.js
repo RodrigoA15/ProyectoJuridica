@@ -446,6 +446,14 @@ export const chartDepartamentoRadicados = async (req, res) => {
       nombre_departamento: "Sistemas",
     });
 
+    const archivo = await Departamento.findOne({
+      nombre_departamento: "ARCHIVO",
+    });
+
+    const secretaria = await Departamento.findOne({
+      nombre_departamento: "Secretaria",
+    });
+
     console.log(juridica);
 
     const countDepartamentos = await Radicado.aggregate([
@@ -456,6 +464,8 @@ export const chartDepartamentoRadicados = async (req, res) => {
             { id_departamento: rmi._id },
             { id_departamento: front._id },
             { id_departamento: sistemas._id },
+            { id_departamento: archivo._id },
+            { id_departamento: secretaria._id },
           ],
           fecha_radicado: {
             $gte: new Date(fechaInicio),
@@ -492,6 +502,18 @@ export const chartDepartamentoRadicados = async (req, res) => {
               $cond: [{ $eq: ["$id_departamento", sistemas._id] }, 1, 0],
             },
           },
+
+          ARCHIVO: {
+            $sum: {
+              $cond: [{ $eq: ["$id_departamento", archivo._id] }, 1, 0],
+            },
+          },
+
+          SECRETARIA: {
+            $sum: {
+              $cond: [{ $eq: ["$id_departamento", secretaria._id] }, 1, 0],
+            },
+          },
         },
       },
 
@@ -506,6 +528,8 @@ export const chartDepartamentoRadicados = async (req, res) => {
           RMI: 1,
           FRONT_OFFICE: 1,
           SISTEMAS: 1,
+          ARCHIVO: 1,
+          SECRETARIA: 1,
           _id: 0,
         },
       },
