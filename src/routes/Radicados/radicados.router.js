@@ -82,4 +82,5 @@ router.get(
   AdminRadicados.AllRadicadosByDate
 );
 
+router.get("/estadoDepartamento", AdminRadicados.stateByDepartament);
 export default router;
