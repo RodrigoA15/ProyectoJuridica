@@ -4,6 +4,7 @@ import { authRequired } from "../../middlewares/validateToken.js";
 // import { validateSchema } from "../../middlewares/validator.js";
 // import { radicadoSchema } from "../../schemas/radicadosSchema.js";
 import * as ExcelRadicados from "../../controllers/Radicados/QuerysExcel.js";
+import * as AdminRadicados from "../../controllers/Radicados/Admin/radicadosAdmin.js";
 const router = Router();
 
 //Radicados>>>>>>>
@@ -75,5 +76,10 @@ router.get("/radicadop", ExcelRadicados.allRadicadosExcel);
 // router.get("/descargarData", ExcelRadicados.dtaexcel);
 
 router.post("/data", RadicadosController.dataFake);
+/////////////////////////////ADMINISTRADOR//////////////////////////////
+router.get(
+  "/radicadosAdmin/:startDate/:endDate",
+  AdminRadicados.AllRadicadosByDate
+);
 
 export default router;
