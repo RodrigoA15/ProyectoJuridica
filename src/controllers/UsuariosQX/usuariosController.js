@@ -20,7 +20,7 @@ export const allUser = async (req, res) => {
 export const updateUser = async (req, res) => {
   try {
     const { username, email, departamento, role } = req.body;
-    const idUsuario = req.params.idusuario;
+    const idUsuario = req.params.idusuario
     console.log(idUsuario);
 
     await Usuarios.findByIdAndUpdate(
