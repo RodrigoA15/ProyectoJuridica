@@ -447,7 +447,7 @@ export const chartDepartamentoRadicados = async (req, res) => {
     });
 
     const archivo = await Departamento.findOne({
-      nombre_departamento: "ARCHIVO",
+      nombre_departamento: "Archivo",
     });
 
     const secretaria = await Departamento.findOne({
