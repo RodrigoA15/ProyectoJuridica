@@ -69,12 +69,16 @@ router.get(
   "/chartdepartamentos/:fecha_inicio/:fecha_fin",
   RadicadosController.chartDepartamentoRadicados
 );
+
+//Grafica asuntos tutela e incidentes
+router.get("/chartasuntos", RadicadosController.chartAsuntosTeI);
 ////////////////////////////////////////////Querys Excel/////////////////////////////////
 // router.get("/radicadoxlsx", ExcelRadicados.allRadicados);
 router.get("/radicadop", ExcelRadicados.allRadicadosExcel);
 
 // router.get("/descargarData", ExcelRadicados.dtaexcel);
 
+//Datos de prueba
 router.post("/data", RadicadosController.dataFake);
 /////////////////////////////ADMINISTRADOR//////////////////////////////
 router.get(

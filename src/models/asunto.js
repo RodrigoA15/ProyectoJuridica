@@ -12,6 +12,17 @@ const AsuntoSchema = new mongoose.Schema(
       ref: "Departamento",
       required: true,
     },
+
+    //Enum tipo asunto
+    //1 por defecto. cualquier asunto
+    //2 Tutela
+    //3 Incidente de desacato
+
+    tipo_asunto: {
+      type: String,
+      enum: ["1", "2", "3"],
+      required: ["Tipo asunto es requerido"],
+    },
   },
   {
     timestamps: true,

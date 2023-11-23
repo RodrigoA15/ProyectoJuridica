@@ -1,5 +1,4 @@
 import Asunto from "../../models/asunto.js";
-import Departamento from "../../models/departamentos.js";
 
 export const getAsunto = async (req, res) => {
   try {
@@ -17,8 +16,12 @@ export const getAsunto = async (req, res) => {
 
 export const createAsunto = async (req, res) => {
   try {
-    const { nombre_asunto, id_departamento } = req.body;
-    const newAsunto = new Asunto({ nombre_asunto, id_departamento });
+    const { nombre_asunto, id_departamento, tipo_asunto } = req.body;
+    const newAsunto = new Asunto({
+      nombre_asunto,
+      id_departamento,
+      tipo_asunto: tipo_asunto || "1",
+    });
 
     const saveAsunto = await newAsunto.save();
     if (saveAsunto) {
@@ -45,7 +48,7 @@ export const getAsuntoById = async (req, res) => {
 export const updateAsunto = async (req, res) => {
   try {
     const asuntofound = await Asunto.findById(req.params.id_asunto);
-    const { nombre_asunto } = req.body;
+    const { nombre_asunto, tipo_asunto } = req.body;
 
     if (!asuntofound) return res.status(404).json("NO se encontro el asunto");
 
@@ -53,6 +56,7 @@ export const updateAsunto = async (req, res) => {
       { _id: req.params.id_asunto },
       {
         nombre_asunto,
+        tipo_asunto,
       },
       {
         new: true,

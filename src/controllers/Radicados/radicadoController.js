@@ -90,7 +90,7 @@ export const createRadicados = async (req, res) => {
       numero_radicado,
       fecha_radicado,
       cantidad_respuesta,
-      observaciones_radicado,
+      observaciones_radicado: observaciones_radicado || "N/A",
       id_procedencia,
       id_canal_entrada,
       id_asunto,
@@ -538,6 +538,32 @@ export const chartDepartamentoRadicados = async (req, res) => {
   } catch (error) {
     res.status(500).json(`error grafica Radicados Departamento ${error}`);
     console.log(error);
+  }
+};
+
+//Consulta tutela e incidentes de desacato
+export const chartAsuntosTeI = async (req, res) => {
+  try {
+    const response = await Radicado.find({
+      estado_radicado: { $ne: "Respuesta" },
+    }).populate({
+      path: "id_asunto",
+      match: {
+        $or: [{ tipo_asunto: { $eq: "2" } }, { tipo_asunto: { $eq: "3" } }],
+      },
+    });
+
+    const filterResult = response.filter((i) => {
+      return i.id_asunto !== null;
+    });
+
+    if (filterResult.length > 0) {
+      res.status(200).json(filterResult);
+    } else {
+      res.status(404).json("No se encontraron resultados");
+    }
+  } catch (error) {
+    res.status(500).json(`Error en chartAsuntosTeI ${error}`);
   }
 };
 
