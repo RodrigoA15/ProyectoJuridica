@@ -20,7 +20,7 @@ const RadicadoSchema = new mongoose.Schema(
 
     observaciones_radicado: {
       type: String,
-      required: ["Observacion Radicados es obligatoria"]
+      required: ["Observacion Radicados es obligatoria"],
     },
 
     //Relaciones>>>>

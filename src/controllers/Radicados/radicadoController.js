@@ -340,11 +340,11 @@ export const queryChartRadicados = async (req, res) => {
 
 export const queryChartCanalEntrada = async (req, res) => {
   try {
-    const presencial = await Canal.findOne({ nombre_canal: "PRESENCIAL" });
-    const email = await Canal.findOne({ nombre_canal: "CORREO ELECTRONICO" });
-    const orfeo = await Canal.findOne({ nombre_canal: "ORFEO" });
+    const presencial = await Canal.findOne({ nombre_canal: "Presencial" });
+    const email = await Canal.findOne({ nombre_canal: "Correo electrónico" });
+    const orfeo = await Canal.findOne({ nombre_canal: "Orfeo" });
     const emailCertificado = await Canal.findOne({
-      nombre_canal: "CORREO CERTIFICADO",
+      nombre_canal: "Correo certificado",
     });
 
     const fechaInicio = req.params.fechainicio;
@@ -435,11 +435,11 @@ export const chartDepartamentoRadicados = async (req, res) => {
       nombre_departamento: "Juridica",
     });
     const rmi = await Departamento.findOne({
-      nombre_departamento: "RMI",
+      nombre_departamento: "Registro municipal de infractores",
     });
 
     const front = await Departamento.findOne({
-      nombre_departamento: "FRONT_OFFICE",
+      nombre_departamento: "Front office",
     });
 
     const sistemas = await Departamento.findOne({
