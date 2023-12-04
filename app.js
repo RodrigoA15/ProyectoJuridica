@@ -21,7 +21,7 @@ import cors from "cors";
 const ruta = "/api";
 const app = express();
 const corsOptions = {
-  origin: "http://localhost:3000",
+  origin: "https://dashboard-juridica.vercel.app",
   credentials: true,
 };
 app.use(cors(corsOptions));
