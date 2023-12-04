@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "build": "babel -d dist index.js ",
-    "start": "nodemon --exec babel-node index.js",
+    "start": "index.js",
     "dev:prod": "pm2 start ecosystem.config.cjs"
   },
   "author": "Rodrigo Papamija",
