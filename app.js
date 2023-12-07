@@ -15,6 +15,7 @@ import routeAsiganacion from "./src/routes/Asignaciones/asignar.router.js";
 import routerRespuesta from "./src/routes/RespuestaRadicados/respuesta.router.js";
 import routerHistorial from "./src/routes/Historial/Historial.router.js";
 import routerUsuariosQX from "./src/routes/UsuariosQX/usuariosQX.router.js";
+import routerCourt from "./src/routes/routesQX/Courts.router.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 
@@ -43,5 +44,6 @@ app.use(`${ruta}`, routeAsiganacion);
 app.use(`${ruta}`, routerRespuesta);
 app.use(`${ruta}`, routerHistorial);
 app.use(`${ruta}`, routerUsuariosQX);
+app.use(`${ruta}`, routerCourt);
 
 export default app;

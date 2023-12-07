@@ -1,5 +1,5 @@
 import { Sequelize, DataTypes } from "sequelize";
-const sequelize = new Sequelize();
+const sequelize = new Sequelize("oracle::memory");
 
 const TIPO_DOCUMENTO = sequelize.define("TIPO_DOCUMENTO", {
   ABREV_DOCUMENTO: {
@@ -74,5 +74,7 @@ const TIPO_DOCUMENTO = sequelize.define("TIPO_DOCUMENTO", {
     type: DataTypes.STRING,
   },
 });
+
+console.log(TIPO_DOCUMENTO === sequelize.models.TIPO_DOCUMENTO);
 
 export default TIPO_DOCUMENTO;
