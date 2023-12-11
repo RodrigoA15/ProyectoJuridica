@@ -65,6 +65,13 @@ const RadicadoSchema = new mongoose.Schema(
       ref: "EstadoRadicado",
       required: true,
     },
+
+    juzgado: [
+      {
+        _id: false,
+        nombreJuzgado: String,
+      },
+    ],
   },
   {
     timestamps: true,

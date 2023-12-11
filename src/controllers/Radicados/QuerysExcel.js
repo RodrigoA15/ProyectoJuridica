@@ -66,6 +66,7 @@ export const allRadicadosExcel = async (req, res) => {
       { path: "id_asunto", select: "nombre_asunto -_id" },
       { path: "id_tipificacion", select: "nombre_tipificacion -_id" },
       { path: "id_entidad", select: "nombre_entidad -_id" },
+      {path: "juzgado"},
       {
         path: "id_departamento",
         select: "nombre_departamento -_id",

@@ -84,6 +84,7 @@ export const createRadicados = async (req, res) => {
       id_entidad,
       id_departamento,
       estado_radicado,
+      juzgado,
     } = req.body;
 
     const newRadicado = new Radicado({
@@ -98,8 +99,9 @@ export const createRadicados = async (req, res) => {
       id_entidad,
       id_departamento,
       estado_radicado,
+      juzgado: [{ nombreJuzgado: juzgado }],
     });
-
+    console.log("req.body:", req.body);
     const saveRadicado = await newRadicado.save();
 
     if (saveRadicado) return res.status(200).json("creado correctamente");
@@ -425,7 +427,6 @@ export const queryChartCanalEntrada = async (req, res) => {
 };
 
 //Grafica Radicados por departamento
-
 export const chartDepartamentoRadicados = async (req, res) => {
   try {
     const fechaInicio = req.params.fecha_inicio;
