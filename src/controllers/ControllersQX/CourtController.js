@@ -1,5 +1,6 @@
 import { QueryTypes } from "sequelize";
 import { sequelize } from "../../connection/connectionBDQX.js";
+import Radicados from "../../models/radicados.js";
 
 //Returns all current courts
 export const allCourts = async (req, res) => {
@@ -40,5 +41,32 @@ export const courtById = async (req, res) => {
     }
   } catch (error) {
     res.status(500).json(`error oneCourt controller ${error}`);
+  }
+};
+
+//Return number of request courts
+export const countRequestCourts = async (req, res) => {
+  try {
+    const count = await Radicados.aggregate([
+      {
+        $match: { "juzgado.nombreJuzgado": { $ne: "N/A" } },
+      },
+
+      {
+        $group: {
+          _id: "null",
+          total: { $sum: 1 },
+        },
+      },
+    ]);
+
+    if (count.length > 0) {
+      res.status(200).json(count);
+    } else {
+      res.status(404).json({ message: "Not Found" });
+    }
+  } catch (error) {
+    res.status(500).json(`Internal Server Error countRequestCourts ${error}`);
+    console.log(error);
   }
 };

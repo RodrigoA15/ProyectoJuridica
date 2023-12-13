@@ -2,7 +2,7 @@ import Respuesta from "../../models/respuesta_radicado.js";
 import multer from "multer";
 import path from "node:path";
 import SambaClient from "samba-client";
-import Radicados from "../../models/radicados.js";
+import fs from "node:fs";
 
 export const getAllRespuestas = async (req, res) => {
   try {
@@ -23,6 +23,7 @@ export const getAllRespuestas = async (req, res) => {
   }
 };
 
+//Carga respuesta radicado y archivo pdf
 export const createRespuesta = async (req, res) => {
   try {
     let nombreArchivo;
@@ -30,7 +31,7 @@ export const createRespuesta = async (req, res) => {
 
     // Define Samba share options
     const sambaOptions = {
-      address: "\\\\192.168.28.100\\programacion y datos",
+      address: "\\\\192.168.28.97pqr",
       username: "",
       password: "",
       domain: "WORKGROUP",
@@ -40,9 +41,23 @@ export const createRespuesta = async (req, res) => {
 
     new SambaClient(sambaOptions);
 
-    // Path to save the PDF file in the Samba share
-    const pathPdf =
-      "\\\\192.168.28.100\\programacion y datos\\RodrigoJR\\PDFJuridica";
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const month = currentDate.toLocaleString("default", { month: "long" });
+    const day = currentDate.getDate().toString().padStart(2, "0");
+
+    const pathPdf = path.join(
+      `\\\\192.168.28.97\\pqr\\${year}\\${month}\\${day}`
+    );
+
+    if (!fs.existsSync(pathPdf)) {
+      try {
+        fs.mkdirSync(pathPdf, { recursive: true });
+        console.log("Directorio creado");
+      } catch (error) {
+        console.log("No se creo el directorio");
+      }
+    }
 
     const storage = multer.diskStorage({
       destination: (req, file, cb) => {
@@ -96,6 +111,25 @@ export const createRespuesta = async (req, res) => {
     console.error("Error in createRespuesta:", error);
     res.status(500).json({ error: `Error createRespuesta ${error.message}` });
   }
+};
+
+//Visualizar pdf
+export const viewPDF = async (req, res) => {
+  const directorio =
+    "\\\\192.168.28.100\\programacion y datos\\RodrigoJR\\PDFJuridica\\2023\\diciembre\\12";
+
+  fs.readdir(directorio, (error, archivos) => {
+    if (error) {
+      console.error(error);
+    } else {
+      archivos.forEach((archivo) => {
+        if (archivo.toLowerCase().endsWith(".pdf")) {
+          const rutaCompleta = path.join(directorio, archivo);
+          res.status(200).json([rutaCompleta]);
+        }
+      });
+    }
+  });
 };
 
 export const respuestasporRadicado = async (req, res) => {

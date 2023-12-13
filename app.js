@@ -18,13 +18,19 @@ import routerUsuariosQX from "./src/routes/UsuariosQX/usuariosQX.router.js";
 import routerCourt from "./src/routes/routesQX/Courts.router.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import path from "node:path";
 
 const ruta = "/api";
 const app = express();
 const corsOptions = {
-  origin: "http://localhost:3000",
+  origin: "http://localhost:3001",
   credentials: true,
 };
+
+const directoryPath =
+  "\\\\192.168.28.100\\programacion y datos\\RodrigoJR\\PDFJuridica";
+
+app.use(express.static(directoryPath));
 app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(morgan("dev"));

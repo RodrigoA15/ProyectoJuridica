@@ -13,6 +13,10 @@ const database = {
   hostname: "192.168.27.12",
   service_name: "TRAN",
   port: "1525",
+
+  //Credenciales Carpeta de red
+  username: "PQR",
+  passwordServer: "Pqr.Expediente.2024",
 };
 
 export default database;
