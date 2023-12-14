@@ -16,9 +16,9 @@ import routerRespuesta from "./src/routes/RespuestaRadicados/respuesta.router.js
 import routerHistorial from "./src/routes/Historial/Historial.router.js";
 import routerUsuariosQX from "./src/routes/UsuariosQX/usuariosQX.router.js";
 import routerCourt from "./src/routes/routesQX/Courts.router.js";
+import routerEntityCourts from "./src/routes/EntidadesJuridicas/entidadJuridica.router.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import path from "node:path";
 
 const ruta = "/api";
 const app = express();
@@ -27,10 +27,6 @@ const corsOptions = {
   credentials: true,
 };
 
-const directoryPath =
-  "\\\\192.168.28.100\\programacion y datos\\RodrigoJR\\PDFJuridica";
-
-app.use(express.static(directoryPath));
 app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(morgan("dev"));
@@ -51,5 +47,6 @@ app.use(`${ruta}`, routerRespuesta);
 app.use(`${ruta}`, routerHistorial);
 app.use(`${ruta}`, routerUsuariosQX);
 app.use(`${ruta}`, routerCourt);
+app.use(`${ruta}`, routerEntityCourts);
 
 export default app;

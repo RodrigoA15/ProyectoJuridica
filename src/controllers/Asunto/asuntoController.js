@@ -27,7 +27,7 @@ export const createAsunto = async (req, res) => {
     if (saveAsunto) {
       res.status(200).json("Creado Correctamente");
     } else {
-      res.status(200).json("Creado Correctamente");
+      res.status(200).json("Failed");
     }
   } catch (error) {
     res.status(500).json(`error de servidor ${error}`);
