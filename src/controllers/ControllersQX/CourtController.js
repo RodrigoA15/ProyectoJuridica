@@ -13,7 +13,7 @@ export const allCourts = async (req, res) => {
     );
 
     if (courts.length > 0) {
-      res.status(200).json({ message: "List of courts", res: courts });
+      res.status(200).json(courts);
     } else {
       res.status(404).json({ message: "Court Not found" });
     }

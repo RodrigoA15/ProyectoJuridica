@@ -28,6 +28,7 @@ export const createRespuesta = async (req, res) => {
   try {
     let nombreArchivo;
     let urlArchivos;
+    let pathPdf;
 
     // Define Samba share options
     const sambaOptions = {
@@ -41,34 +42,56 @@ export const createRespuesta = async (req, res) => {
 
     new SambaClient(sambaOptions);
 
-    const currentDate = new Date();
-    const year = currentDate.getFullYear();
-    const month = currentDate.toLocaleString("default", { month: "long" });
-    const day = currentDate.getDate().toString().padStart(2, "0");
-
-    const pathPdf = path.join(
-      `\\\\192.168.28.97\\pqr\\${year}\\${month}\\${day}`
-    );
-
-    if (!fs.existsSync(pathPdf)) {
-      try {
-        fs.mkdirSync(pathPdf, { recursive: true });
-        console.log("Directorio creado");
-      } catch (error) {
-        console.log("No se creo el directorio");
-      }
-    }
-
     const storage = multer.diskStorage({
-      destination: (req, file, cb) => {
+      destination: async (req, file, cb) => {
+        //Agregar directorio con el numero de radicado de entrada
+        const { id_asignacion } = req.body;
+        const response = await Respuesta.findOne({
+          id_asignacion: id_asignacion,
+        }).populate({
+          path: "id_asignacion",
+
+          populate: [
+            {
+              path: "id_radicado",
+            },
+          ],
+        });
+
+        if (!response) {
+          console.log("No se encontraron asignaciones pendientes");
+        } else {
+          const numero_radicado =
+            response.id_asignacion.id_radicado.numero_radicado;
+          console.log(response.id_asignacion.id_radicado.numero_radicado);
+          const currentDate = new Date();
+          const year = currentDate.getFullYear();
+          const month = currentDate.toLocaleString("default", {
+            month: "long",
+          });
+          const day = currentDate.getDate().toString().padStart(2, "0");
+
+          pathPdf = path.join(
+            `\\\\192.168.28.97\\pqr\\${year}\\${month}\\${day}\\${numero_radicado}`
+          );
+          //Crea directorio en caso de no existir
+          if (!fs.existsSync(pathPdf)) {
+            try {
+              fs.mkdirSync(pathPdf, { recursive: true });
+              console.log("Directorio creado");
+            } catch (error) {
+              console.log("No se creo el directorio");
+            }
+          }
+        }
         cb(null, pathPdf);
       },
-      filename: (req, file, cb) => {
+      filename: async (req, file, cb) => {
         nombreArchivo = file.originalname;
         cb(null, nombreArchivo);
       },
     });
-
+    //Validacion de archivo
     const upload = multer({
       storage,
       fileFilter: (req, file, cb) => {
@@ -87,7 +110,7 @@ export const createRespuesta = async (req, res) => {
           .status(500)
           .json({ error: "Error creating file: " + err.message });
       }
-
+      //Creacion de registro en la base de datos
       urlArchivos = path.join(pathPdf, nombreArchivo);
       const { id_asignacion, numero_radicado_respuesta, fechaRespuesta } =
         req.body;
@@ -114,6 +137,7 @@ export const createRespuesta = async (req, res) => {
 };
 
 //Visualizar pdf
+//Deprecated >>>>
 export const viewPDF = async (req, res) => {
   const directorio =
     "\\\\192.168.28.100\\programacion y datos\\RodrigoJR\\PDFJuridica\\2023\\diciembre\\12";
@@ -158,7 +182,6 @@ export const respuestasporRadicado = async (req, res) => {
         ],
       })
       .lean();
-    console.log(response);
     const validacion = response.filter((respuesta) => {
       return respuesta.id_asignacion.id_radicado !== null;
     });
