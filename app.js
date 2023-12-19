@@ -23,7 +23,7 @@ import cors from "cors";
 const ruta = "/api";
 const app = express();
 const corsOptions = {
-  origin: "http://localhost:3001",
+  origin: "http://192.168.28.74:3000",
   credentials: true,
 };
 

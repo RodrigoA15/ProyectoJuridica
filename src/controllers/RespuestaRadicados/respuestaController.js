@@ -42,48 +42,26 @@ export const createRespuesta = async (req, res) => {
 
     new SambaClient(sambaOptions);
 
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const month = currentDate.toLocaleString("default", {
+      month: "long",
+    });
+    const day = currentDate.getDate().toString().padStart(2, "0");
+
+    pathPdf = path.join(`\\\\192.168.28.97\\pqr\\${year}\\${month}\\${day}`);
+    //Crea directorio en caso de no existir
+    if (!fs.existsSync(pathPdf)) {
+      try {
+        fs.mkdirSync(pathPdf, { recursive: true });
+        console.log("Directorio creado");
+      } catch (error) {
+        console.log("No se creo el directorio");
+      }
+    }
+
     const storage = multer.diskStorage({
       destination: async (req, file, cb) => {
-        //Agregar directorio con el numero de radicado de entrada
-        const { id_asignacion } = req.body;
-        const response = await Respuesta.findOne({
-          id_asignacion: id_asignacion,
-        }).populate({
-          path: "id_asignacion",
-
-          populate: [
-            {
-              path: "id_radicado",
-            },
-          ],
-        });
-
-        if (!response) {
-          console.log("No se encontraron asignaciones pendientes");
-        } else {
-          const numero_radicado =
-            response.id_asignacion.id_radicado.numero_radicado;
-          console.log(response.id_asignacion.id_radicado.numero_radicado);
-          const currentDate = new Date();
-          const year = currentDate.getFullYear();
-          const month = currentDate.toLocaleString("default", {
-            month: "long",
-          });
-          const day = currentDate.getDate().toString().padStart(2, "0");
-
-          pathPdf = path.join(
-            `\\\\192.168.28.97\\pqr\\${year}\\${month}\\${day}\\${numero_radicado}`
-          );
-          //Crea directorio en caso de no existir
-          if (!fs.existsSync(pathPdf)) {
-            try {
-              fs.mkdirSync(pathPdf, { recursive: true });
-              console.log("Directorio creado");
-            } catch (error) {
-              console.log("No se creo el directorio");
-            }
-          }
-        }
         cb(null, pathPdf);
       },
       filename: async (req, file, cb) => {
@@ -91,6 +69,7 @@ export const createRespuesta = async (req, res) => {
         cb(null, nombreArchivo);
       },
     });
+
     //Validacion de archivo
     const upload = multer({
       storage,
@@ -334,5 +313,28 @@ export const respuestasporRadicadoExcel = async (req, res) => {
   } catch (error) {
     res.status(500).json(`error respuestas por radicado ${error}`);
     console.log(error);
+  }
+};
+
+//ver pdf respuestas
+export const viewPDFAnswer = async (req, res) => {
+  try {
+    const { prueba } = req.params;
+    const data = await Respuesta.findOne({
+      _id: prueba,
+    });
+
+    if (!data) {
+      return res.status(404).json({ message: "No se encontraron datos." });
+    }
+
+    const archivoPath = data.urlArchivo; // Usa la URL directamente
+    console.log(archivoPath);
+    res.sendFile(archivoPath);
+  } catch (error) {
+    console.error(`Error al intentar ver los PDFs: ${error}`);
+    res
+      .status(500)
+      .json({ message: `Error al intentar ver los PDFs: ${error}` });
   }
 };

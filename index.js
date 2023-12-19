@@ -3,11 +3,11 @@ import app from "./app.js";
 import "./src/connection/connectionBDQX.js";
 
 const PORT = 4000;
-// const HOST = "192.168.28.74";
+const HOST = "192.168.28.74";
 
 ConnectionMongo();
 
-app.listen(PORT, (error) => {
+app.listen(PORT, HOST, (error) => {
   if (error) {
     console.log(`error server: ${error}`);
   } else {

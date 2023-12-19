@@ -7,6 +7,7 @@ import {
   // answersByUser,
   respuestasporRadicadoExcel,
   viewPDF,
+  viewPDFAnswer,
 } from "../../controllers/RespuestaRadicados/respuestaController.js";
 import { authRequired, isJuridica } from "../../middlewares/validateToken.js";
 
@@ -29,6 +30,7 @@ router.get(
 );
 
 router.get("/radicados_respuestas_excel", respuestasporRadicadoExcel);
+router.get("/pdf-viewer-answer/:prueba", viewPDFAnswer);
 //Respuestas por usuario>>>>>>
 // router.get("/answeruser", answersByUser);
 
