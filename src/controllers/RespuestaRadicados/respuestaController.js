@@ -1,4 +1,5 @@
 import Respuesta from "../../models/respuesta_radicado.js";
+import Asignacion from "../../models/asignar_radicado.js";
 import multer from "multer";
 import path from "node:path";
 import SambaClient from "samba-client";
@@ -62,45 +63,37 @@ export const createRespuesta = async (req, res) => {
 
     const storage = multer.diskStorage({
       destination: async (req, file, cb) => {
+        console.log(req.body);
         const { id_asignacion } = req.body;
-        const response = await Respuesta.findOne({
-          id_asignacion: id_asignacion,
+        const response = await Asignacion.findOne({
+          _id: id_asignacion,
         }).populate({
-          path: "id_asignacion",
-
-          populate: [
-            {
-              path: "id_radicado",
-            },
-          ],
+          path: "id_radicado",
         });
+        console.log(`Data : ${response}`);
 
-        if (!response) {
-          console.log("No se encontraron asignaciones pendientes");
-        } else {
-          const numero_radicado =
-            response.id_asignacion.id_radicado.numero_radicado;
-          console.log(response.id_asignacion.id_radicado.numero_radicado);
-          const currentDate = new Date();
-          const year = currentDate.getFullYear();
-          const month = currentDate.toLocaleString("default", {
-            month: "long",
-          });
-          const day = currentDate.getDate().toString().padStart(2, "0");
+        const numero_radicado = response.id_radicado.numero_radicado;
+        console.log(`Numerpppp ${numero_radicado}`);
+        const currentDate = new Date();
+        const year = currentDate.getFullYear();
+        const month = currentDate.toLocaleString("default", {
+          month: "long",
+        });
+        const day = currentDate.getDate().toString().padStart(2, "0");
 
-          pathPdf = path.join(
-            `\\\\192.168.28.97\\pqr\\${year}\\${month}\\${day}\\${numero_radicado}`
-          );
-          //Crea directorio en caso de no existir
-          if (!fs.existsSync(pathPdf)) {
-            try {
-              fs.mkdirSync(pathPdf, { recursive: true });
-              console.log("Directorio creado");
-            } catch (error) {
-              console.log("No se creo el directorio");
-            }
+        pathPdf = path.join(
+          `\\\\192.168.28.97\\pqr\\${year}\\${month}\\${day}\\${numero_radicado}`
+        );
+        //Crea directorio en caso de no existir
+        if (!fs.existsSync(pathPdf)) {
+          try {
+            fs.mkdirSync(pathPdf, { recursive: true });
+            console.log("Directorio creado");
+          } catch (error) {
+            console.log("No se creo el directorio");
           }
         }
+
         cb(null, pathPdf);
       },
       filename: async (req, file, cb) => {
