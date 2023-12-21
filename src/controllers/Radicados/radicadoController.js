@@ -596,3 +596,25 @@ export const dataFake = async (req, res) => {
     console.log(error);
   }
 };
+
+export const updatequantity = async (req, res) => {
+  try {
+    const { id_radicado } = req.params;
+    const { cantidad_respuesta } = req.body;
+    const updated = await Radicado.findByIdAndUpdate(
+      id_radicado,
+      {
+        cantidad_respuesta,
+      },
+      { new: true }
+    );
+
+    if (updated) {
+      res.status(200).json("Asignado correctamente");
+    } else {
+      res.status(400).json("No se pudo asignar");
+    }
+  } catch (error) {
+    res.status(500).json(`error actualización cantidad respuestas ${error}`);
+  }
+};

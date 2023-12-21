@@ -87,4 +87,6 @@ router.get(
 );
 
 router.get("/estadoDepartamento", AdminRadicados.stateByDepartament);
+
+router.put("/updateQuantity/:id_radicado", RadicadosController.updatequantity);
 export default router;
