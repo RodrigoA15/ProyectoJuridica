@@ -11,12 +11,6 @@ const EntidadesJuridicas = new mongoose.Schema(
       type: String,
       required: true,
     },
-
-    runt_ente: {
-      type: Number,
-      required: true,
-      unique: true,
-    },
   },
   {
     timestamps: true,

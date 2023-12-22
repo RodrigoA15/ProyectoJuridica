@@ -16,12 +16,13 @@ export const getAllEntities = async (req, res) => {
 
 export const getEntityById = async (req, res, next) => {
   try {
-    const { runtentidad } = req.params;
+    const { desc_ente_juridico, municipio } = req.params;
     const response = await EntidadJuridica.findOne({
-      runt_ente: { $eq: runtentidad },
+      desc_ente_juridico: { $eq: desc_ente_juridico },
+      municipio: { $eq: municipio },
     });
     if (response) {
-      res.status(200).json({ message: "Entidad ya registrada" });
+      res.status(200).json({ response, message: "Entidad ya registrada" });
     } else {
       res.status(404).json({ message: "No se encontro la entidad" });
     }
@@ -34,32 +35,35 @@ export const getEntityById = async (req, res, next) => {
 
 export const createEntity = async (req, res) => {
   try {
-    const { desc_ente_juridico, municipio, runt_ente } = req.body;
-    // //input validation
-    if (!desc_ente_juridico || !municipio || !runt_ente) {
+    const { desc_ente_juridico, municipio } = req.body;
+
+    // Input validation
+    if (!desc_ente_juridico || !municipio) {
       return res
         .status(400)
-        .json("Description, municipality  and runt ente are required fields.");
+        .json("Description and municipality are required fields.");
     }
 
-    // Check if runt ente already
-    const existingEntity = await EntidadJuridica.findOne({ runt_ente });
-    if (existingEntity) {
-      return res.status(400).json(`Runt ente alredy exists ${runt_ente}`);
+    const response = await EntidadJuridica.findOne({
+      desc_ente_juridico: desc_ente_juridico,
+      municipio: municipio,
+    });
+
+    console.log(response);
+
+    if (response) {
+      return res.status(200).json("Ente juridico ya registrado");
     }
 
-    //create entity
     const newEntity = new EntidadJuridica({
       desc_ente_juridico,
       municipio,
-      runt_ente,
     });
 
-    //save entity
-    const savedEntity = await newEntity.save();
-
-    console.log(`Entity created: ${savedEntity}`);
+    // Save entity
+    await newEntity.save();
   } catch (error) {
-    console.log(`error entity controller ${error}`);
+    console.log(`Error in entity controller: ${error}`);
+    return res.status(500).json(`error crear entidad juridica ${error}`);
   }
 };

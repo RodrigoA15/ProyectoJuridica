@@ -49,7 +49,7 @@ export const countRequestCourts = async (req, res) => {
   try {
     const count = await Radicados.aggregate([
       {
-        $match: { "juzgado.nombreJuzgado": { $ne: "N/A" } },
+        $match: { "juzgado": { $ne: null } },
       },
 
       {
@@ -57,7 +57,7 @@ export const countRequestCourts = async (req, res) => {
           _id: "null",
           total: { $sum: 1 },
         },
-      },
+      }, 
     ]);
 
     if (count.length > 0) {

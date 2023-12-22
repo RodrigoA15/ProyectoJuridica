@@ -99,7 +99,7 @@ export const createRadicados = async (req, res) => {
       id_entidad,
       id_departamento,
       estado_radicado,
-      juzgado: [{ nombreJuzgado: juzgado }],
+      juzgado,
     });
     console.log("req.body:", req.body);
     const saveRadicado = await newRadicado.save();

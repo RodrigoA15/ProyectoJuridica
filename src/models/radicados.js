@@ -66,12 +66,10 @@ const RadicadoSchema = new mongoose.Schema(
       required: true,
     },
 
-    juzgado: [
-      {
-        _id: false,
-        nombreJuzgado: String,
-      },
-    ],
+    juzgado: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "EntidadesJuridicas",
+    },
   },
   {
     timestamps: true,
