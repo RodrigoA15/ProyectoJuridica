@@ -7,7 +7,8 @@ import { TOKEN_SECRET } from "../../config.js";
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const user = await User.findOne({ email }).populate("role");
+    const user = await User.findOne({ email }).populate("role departamento");
+    console.log(user);
     if (!user)
       return res
         .status(404)
@@ -43,9 +44,12 @@ export const verifyToken = async (req, res) => {
   jwt.verify(token, TOKEN_SECRET, async (error, user) => {
     if (error) return res.sendStatus(401);
 
-    const userFound = await User.findById(user.id).populate("role");
+    const userFound = await User.findById(user.id).populate(
+      "role departamento"
+    );
     if (!userFound) return res.sendStatus(401);
 
+    console.log(userFound);
     return res.json({
       id: userFound._id,
       username: userFound.username,
