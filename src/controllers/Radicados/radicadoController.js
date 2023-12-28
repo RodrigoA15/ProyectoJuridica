@@ -168,7 +168,7 @@ export const deleteRadicado = async (req, res) => {
 };
 
 //Consulta estado radicado por departamentos
-//Sistemas >>>>>>>
+//!Sistemas >>>>>>>
 
 export const departamentoRadicado = async (req, res) => {
   try {
@@ -188,8 +188,8 @@ export const departamentoRadicado = async (req, res) => {
     console.log(error);
   }
 };
-
-//Juridica >>>>>>
+//!----------------------------------------------------------------
+//TODO Juridica >>>>>>
 export const juridicaRadicado = async (req, res) => {
   try {
     const response = await Radicado.find({
@@ -209,7 +209,7 @@ export const juridicaRadicado = async (req, res) => {
   }
 };
 
-//Actualizacion de departamentos  (reasignacion de radicado)>>>
+//TODO Actualizacion de departamentos  (reasignacion de radicado)>>>
 export const updateDepartamento = async (req, res) => {
   try {
     const { id_departamento } = req.body;
@@ -232,7 +232,7 @@ export const updateDepartamento = async (req, res) => {
   }
 };
 
-//Grafica entidad
+//TODO Grafica entidad
 export const chartEntidad = async (req, res) => {
   try {
     const entidad1 = await Entidad.findOne({ nombre_entidad: "Movit" });
@@ -288,7 +288,7 @@ export const chartEntidad = async (req, res) => {
   }
 };
 
-//Grafica Radicados
+//TODO Grafica Radicados
 export const queryChartRadicados = async (req, res) => {
   try {
     const fechaInicio = req.params.fecha_inicio;
@@ -340,6 +340,7 @@ export const queryChartRadicados = async (req, res) => {
   }
 };
 
+//TODO Consulta grafica canales de entrada
 export const queryChartCanalEntrada = async (req, res) => {
   try {
     const presencial = await Canal.findOne({ nombre_canal: "Presencial" });
@@ -426,7 +427,7 @@ export const queryChartCanalEntrada = async (req, res) => {
   }
 };
 
-//Grafica Radicados por departamento
+//TODO Grafica Radicados por departamento
 export const chartDepartamentoRadicados = async (req, res) => {
   try {
     const fechaInicio = req.params.fecha_inicio;
@@ -542,7 +543,7 @@ export const chartDepartamentoRadicados = async (req, res) => {
   }
 };
 
-//Consulta tutela e incidentes de desacato
+//TODO Consulta tutela e incidentes de desacato
 export const chartAsuntosTeI = async (req, res) => {
   try {
     const response = await Radicado.find({

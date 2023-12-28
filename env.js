@@ -17,6 +17,9 @@ const database = {
   //Credenciales Carpeta de red
   username: "PQR",
   passwordServer: "Pqr.Expediente.2024",
+
+  //TODO Direccion de servidor donde se guardan los archivos PDF
+  address: "\\\\192.168.28.97pqr",
 };
 
 export default database;

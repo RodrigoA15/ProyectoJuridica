@@ -4,6 +4,7 @@ import multer from "multer";
 import path from "node:path";
 import SambaClient from "samba-client";
 import fs from "node:fs";
+import database from "../../../env.js";
 
 export const getAllRespuestas = async (req, res) => {
   try {
@@ -31,9 +32,10 @@ export const createRespuesta = async (req, res) => {
     let urlArchivos;
     let pathPdf;
 
-    // Define Samba share options
+    //TODO Define Samba share options
+    //? Add adress to ENV
     const sambaOptions = {
-      address: "\\\\192.168.28.97pqr",
+      address: database.address,
       username: "",
       password: "",
       domain: "WORKGROUP",
@@ -42,24 +44,6 @@ export const createRespuesta = async (req, res) => {
     };
 
     new SambaClient(sambaOptions);
-
-    // const currentDate = new Date();
-    // const year = currentDate.getFullYear();
-    // const month = currentDate.toLocaleString("default", {
-    //   month: "long",
-    // });
-    // const day = currentDate.getDate().toString().padStart(2, "0");
-
-    // pathPdf = path.join(`\\\\192.168.28.97\\pqr\\${year}\\${month}\\${day}`);
-    // //Crea directorio en caso de no existir
-    // if (!fs.existsSync(pathPdf)) {
-    //   try {
-    //     fs.mkdirSync(pathPdf, { recursive: true });
-    //     console.log("Directorio creado");
-    //   } catch (error) {
-    //     console.log("No se creo el directorio");
-    //   }
-    // }
 
     const storage = multer.diskStorage({
       destination: async (req, file, cb) => {
@@ -84,7 +68,7 @@ export const createRespuesta = async (req, res) => {
         pathPdf = path.join(
           `\\\\192.168.28.97\\pqr\\${year}\\${month}\\${day}\\${numero_radicado}`
         );
-        //Crea directorio en caso de no existir
+        //TODO Crea directorio en caso de no existir
         if (!fs.existsSync(pathPdf)) {
           try {
             fs.mkdirSync(pathPdf, { recursive: true });
@@ -147,8 +131,8 @@ export const createRespuesta = async (req, res) => {
   }
 };
 
-//Visualizar pdf
-//Deprecated >>>>
+//!Visualizar pdf
+//!Deprecated >>>>
 export const viewPDF = async (req, res) => {
   const directorio =
     "\\\\192.168.28.100\\programacion y datos\\RodrigoJR\\PDFJuridica\\2023\\diciembre\\12";
@@ -252,8 +236,8 @@ export const respuestasJuridica = async (req, res) => {
   }
 };
 
-//Usuarios con mas repuestas
-//Not USED >>>>>>>
+//!Usuarios con mas repuestas
+//!Not USED >>>>>>>
 // export const answersByUser = async (req, res) => {
 //   try {
 //     const fecha = Radicados.find().select("fecha_radicado");
@@ -304,7 +288,7 @@ export const respuestasJuridica = async (req, res) => {
 //   }
 // };
 
-//Reporte de excel radicados con sus respuestas
+//TODO Reporte de excel radicados con sus respuestas
 export const respuestasporRadicadoExcel = async (req, res) => {
   try {
     const response = await Respuesta.find({})
@@ -348,7 +332,7 @@ export const respuestasporRadicadoExcel = async (req, res) => {
   }
 };
 
-//ver pdf respuestas
+//TODO ver pdf respuestas
 export const viewPDFAnswer = async (req, res) => {
   try {
     const { prueba } = req.params;
@@ -360,7 +344,7 @@ export const viewPDFAnswer = async (req, res) => {
       return res.status(404).json({ message: "No se encontraron datos." });
     }
 
-    const archivoPath = data.urlArchivo; // Usa la URL directamente
+    const archivoPath = data.urlArchivo; //TODO Usa la URL directamente
     console.log(archivoPath);
     res.sendFile(archivoPath);
   } catch (error) {

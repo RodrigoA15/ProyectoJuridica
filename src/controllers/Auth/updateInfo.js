@@ -6,21 +6,20 @@ export const updatePassword = async (req, res) => {
     const id = req.params.id;
     const { password } = req.body;
 
-    // Validación de contraseña
+    //TODO Validación de contraseña
     if (!password) {
       return res
         .status(400)
         .json({ error: "La contraseña no puede estar vacía" });
     }
 
+    //TODO encriptacion de contraseña
     const passwordHash = await bcrypt.hash(password, 10);
     const data = await User.findByIdAndUpdate(
       id,
       { password: passwordHash },
       { new: true }
     );
-
-    console.log(data);
 
     if (data) {
       res.status(200).json({ message: "Contraseña Actualizada" });

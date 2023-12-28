@@ -2,15 +2,41 @@ import Asunto from "../../models/asunto.js";
 
 export const getAsunto = async (req, res) => {
   try {
-    const asunto = await Asunto.find().populate("id_departamento");
+    const resultados = await Asunto.aggregate([
+      {
+        $group: {
+          _id: "$id_departamento",
+          asuntos: {
+            $push: {
+              _id: "$_id",
+              nombre_asunto: "$nombre_asunto",
+            },
+          },
+        },
+      },
+      {
+        $lookup: {
+          from: "departamentos",
+          localField: "_id",
+          foreignField: "_id",
+          as: "departamento_info",
+        },
+      },
+      {
+        $unwind: "$departamento_info",
+      },
+      {
+        $project: {
+          _id: 0,
+          nombre_departamento: "$departamento_info.nombre_departamento",
+          asuntos: 1,
+        },
+      },
+    ]).exec();
 
-    if (asunto.length > 0) {
-      res.status(200).json(asunto);
-    } else {
-      res.status(404).json("No hay asuntos");
-    }
+    res.status(200).json(resultados);
   } catch (error) {
-    res.status(500).json(`error de servidor Asuntos ${error}`);
+    res.status(500).json(`error asuntos por departamento ${error}`);
   }
 };
 
