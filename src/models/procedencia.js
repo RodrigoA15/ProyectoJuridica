@@ -14,7 +14,7 @@ const ProcedenciaSchema = new mongoose.Schema(
 
     tipo_identificacion: {
       type: String,
-      enum: ["CC", "CE", "PEP", "PPT"],
+      enum: ["CC", "CE", "PEP", "PPT", "OTRO"],
       required: true,
     },
 

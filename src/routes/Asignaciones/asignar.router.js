@@ -12,4 +12,9 @@ router.get(
   AsignacionController.juridicaRadicadoAsignados
 );
 
+router.get(
+  "/asignaciones1/:numero_radicado",
+  AsignacionController.asignacionesById
+);
+
 export default router;
