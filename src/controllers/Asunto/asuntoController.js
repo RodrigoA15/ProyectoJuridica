@@ -27,7 +27,7 @@ export const getAsunto = async (req, res) => {
       },
       {
         $project: {
-          _id: 0,
+          _id: 1,
           nombre_departamento: "$departamento_info.nombre_departamento",
           asuntos: 1,
         },
